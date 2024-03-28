@@ -42,7 +42,7 @@
 		"close-with-grace": "^1.2.0",
 		"clsx": "^2.1.0",
 		"crypto-js": "^4.2.0",
-		"date-fns": "^3.0.5",
+		"date-fns": "^3.6.0",
 		"drizzle-orm": "^0.30.4",
 		"enforce-unique": "^1.2.0",
 		"isbot": "^4.1.0",

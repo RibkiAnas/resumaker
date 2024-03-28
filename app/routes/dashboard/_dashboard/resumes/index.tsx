@@ -37,6 +37,7 @@ import { ErrorList } from '~/components/forms';
 import { StatusButton } from '~/components/ui/status-button';
 import { eq } from 'drizzle-orm';
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react';
+import { formatDistanceToNow } from 'date-fns';
 
 export const loader = async ({ request, context }: LoaderFunctionArgs) => {
 	const userId = await getUserId(request, context);
@@ -227,7 +228,8 @@ function Index() {
 											<h4 className='font-medium text-md'>{resume.title}</h4>
 
 											<p className='text-xs opacity-75'>
-												Last updated {resume.updatedAt}
+												Last updated{' '}
+												{formatDistanceToNow(String(resume.updatedAt))}
 											</p>
 										</div>
 									</Card>
