@@ -18,7 +18,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 
 import { Button } from '../ui/button';
 import Logo from '../../assets/logo-black-1200x1200.png';
-import ResumeForms from './resume-forms';
+import ResumeForms from './resumeForm';
 import ResumeDisplay from './resume-display';
 import {
 	DropdownMenu,
@@ -32,11 +32,13 @@ import { Form, Link } from '@remix-run/react';
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react';
 
 interface ResumeBuilderProps {
+	resume: { id: string; title: string | null; content: unknown };
 	isLoggedInUser: boolean;
 	defaultLayout?: number[] | undefined;
 }
 
 function ResumeBuilder({
+	resume,
 	isLoggedInUser,
 	defaultLayout = [265, 440, 655],
 }: ResumeBuilderProps) {
@@ -188,7 +190,7 @@ function ResumeBuilder({
 				</ResizablePanel>
 				{/* <ResizableHandle className='hidden md:flex' withHandle /> */}
 				<ResizablePanel defaultSize={defaultLayout[2]} className='border'>
-					<ResumeDisplay />
+					<ResumeDisplay resume={resume} />
 				</ResizablePanel>
 			</ResizablePanelGroup>
 		</TooltipProvider>
