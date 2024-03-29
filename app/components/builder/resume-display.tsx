@@ -37,6 +37,17 @@ import {
 } from '../ui/select';
 import { Textarea } from '../ui/textarea';
 import { ProfileForm } from './resumeForm/profile-form';
+import { selectFormsOrder, ShowForm } from '~/lib/redux/settingsSlice';
+import { WorkexperiencesForm } from './resumeForm/work-experiences-form';
+import { useAppSelector } from '~/lib/redux/hooks';
+
+const formTypeToComponent: { [type in ShowForm]: () => JSX.Element } = {
+  workExperiences: WorkexperiencesForm,
+  educations: () => <></>,
+  projects: () => <></>,
+  skills: () => <></>,
+  custom: () => <></>,
+};
 
 function ResumeDisplay({
 	resume,
@@ -55,6 +66,8 @@ function ResumeDisplay({
 		onAfterPrint: () => console.log('after printing...'),
 		removeAfterPrint: true,
 	});
+
+  const formsOrder = useAppSelector(selectFormsOrder);
 
 	return (
 		<div className='flex h-[100vh] flex-col'>
@@ -75,6 +88,10 @@ function ResumeDisplay({
 						</DrawerHeader>
 						<form className='grid w-full items-start gap-6 overflow-auto p-4 pt-0'>
 							<ProfileForm />
+              {formsOrder.map((form) => {
+                const Component = formTypeToComponent[form];
+                return <Component key={form} />;
+              })}
 						</form>
 					</DrawerContent>
 				</Drawer>
