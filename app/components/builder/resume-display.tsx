@@ -48,6 +48,7 @@ import { ResumeprofilePDF } from './resume/resume-profile-pdf';
 import { ResumePDFWorkExperience } from './resume/resume-pdf-work-experience';
 import { ResumePDFEducation } from './resume/resume-pdf-education';
 import { ResumPDFProject } from './resume/resum-pdf-project';
+import { ResumePDFSkills } from './resume/resume-pdf-skills';
 
 const formTypeToComponent: { [type in ShowForm]: () => JSX.Element } = {
 	workExperiences: WorkexperiencesForm,
@@ -68,7 +69,7 @@ function ResumeDisplay({
 }) {
 	const templateRef = useRef(null);
 	const resumee = useAppSelector(selectResume);
-	const { profile, workExperiences, educations, projects } = resumee;
+	const { profile, workExperiences, educations, projects, skills } = resumee;
 	const settings = useAppSelector(selectSettings);
 	const isA4 = settings.documentSize === 'A4';
 	const width = isA4 ? A4_WIDTH_PX : LETTER_WIDTH_PX;
@@ -111,7 +112,14 @@ function ResumeDisplay({
 				themeColor={themeColor}
 			/>
 		),
-		skills: () => <></>,
+		skills: () => (
+			<ResumePDFSkills
+				heading={formToHeading['skills']}
+				skills={skills}
+				themeColor={themeColor}
+				showBulletPoints={showBulletPoints['skills']}
+			/>
+		),
 		custom: () => <></>,
 	};
 

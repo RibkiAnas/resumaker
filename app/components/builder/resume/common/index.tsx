@@ -122,3 +122,35 @@ export const ResumePDFLink = ({
 		</a>
 	);
 };
+
+export const ResumeFeaturedSkill = ({
+	skill,
+	rating,
+	themeColor,
+	style = {},
+}: {
+	skill: string;
+	rating: number;
+	themeColor: string;
+	style?: any;
+}) => {
+	const numCircles = 5;
+
+	return (
+		<div className='flex flex-row' style={{ alignItems: 'center', ...style }}>
+			<ResumePDFText style={{ marginRight: '1.5pt' }}>{skill}</ResumePDFText>
+			{[...Array(numCircles)].map((_, idx) => (
+				<div
+					key={idx}
+					style={{
+						height: '9pt',
+						width: '9pt',
+						marginLeft: '2.25pt',
+						backgroundColor: rating >= idx ? themeColor : '#d9d9d9',
+						borderRadius: '100%',
+					}}
+				/>
+			))}
+		</div>
+	);
+};
