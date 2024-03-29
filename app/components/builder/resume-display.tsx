@@ -42,12 +42,13 @@ import { WorkexperiencesForm } from './resumeForm/work-experiences-form';
 import { useAppSelector } from '~/lib/redux/hooks';
 import { EducationsForm } from './resumeForm/educations-form';
 import { ProjectsForm } from './resumeForm/projects-form';
+import { SkillsForm } from './resumeForm/skills-form';
 
 const formTypeToComponent: { [type in ShowForm]: () => JSX.Element } = {
 	workExperiences: WorkexperiencesForm,
 	educations: EducationsForm,
 	projects: ProjectsForm,
-	skills: () => <></>,
+	skills: SkillsForm,
 	custom: () => <></>,
 };
 
