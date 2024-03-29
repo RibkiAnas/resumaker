@@ -24,7 +24,12 @@ import {
 	DrawerTrigger,
 } from '../ui/drawer';
 import { ProfileForm } from './resumeForm/profile-form';
-import { selectFormsOrder, ShowForm } from '~/lib/redux/settingsSlice';
+import {
+	DEFAULT_FONT_COLOR,
+	selectFormsOrder,
+	selectSettings,
+	ShowForm,
+} from '~/lib/redux/settingsSlice';
 import { WorkexperiencesForm } from './resumeForm/work-experiences-form';
 import { useAppSelector } from '~/lib/redux/hooks';
 import { EducationsForm } from './resumeForm/educations-form';
@@ -32,6 +37,14 @@ import { ProjectsForm } from './resumeForm/projects-form';
 import { SkillsForm } from './resumeForm/skills-form';
 import { CustomForm } from './resumeForm/custom-form';
 import { ThemeForm } from './resumeForm/themeForm';
+import { selectResume } from '~/lib/redux/resumeSlice';
+import {
+	A4_HEIGHT_PX,
+	A4_WIDTH_PX,
+	LETTER_HEIGHT_PX,
+	LETTER_WIDTH_PX,
+} from '~/lib/constants';
+import { ResumeprofilePDF } from './resume/resume-profile-pdf';
 
 const formTypeToComponent: { [type in ShowForm]: () => JSX.Element } = {
 	workExperiences: WorkexperiencesForm,
@@ -51,6 +64,13 @@ function ResumeDisplay({
 	};
 }) {
 	const templateRef = useRef(null);
+	const resumee = useAppSelector(selectResume);
+	const { profile } = resumee;
+	const settings = useAppSelector(selectSettings);
+	const isA4 = settings.documentSize === 'A4';
+	const width = isA4 ? A4_WIDTH_PX : LETTER_WIDTH_PX;
+	const height = isA4 ? A4_HEIGHT_PX : LETTER_HEIGHT_PX;
+	const themeColor = settings.themeColor || DEFAULT_FONT_COLOR;
 
 	const handlePrint = useReactToPrint({
 		documentTitle: 'Print This Document',
@@ -131,12 +151,39 @@ function ResumeDisplay({
 							<div
 								className='relative bg-white shadow-2xl'
 								style={{
-									width: `${210 * 3.78}px`,
-									minHeight: `${297 * 3.78}px`,
+									width: `${width}px`,
+									height: `${height}px`,
 								}}
 							>
-								<div ref={templateRef} className='p-[var(--margin)] space-y-3'>
-									My cool content here!
+								<div
+									ref={templateRef}
+									className='flex flex-col w-full h-full p-[var(--margin)]'
+									style={{
+										color: DEFAULT_FONT_COLOR,
+										fontFamily: settings.fontFamily,
+										fontSize: settings.fontSize + 'pt',
+									}}
+								>
+									{Boolean(settings.themeColor) && (
+										<div
+											className='h-[14px]'
+											style={{
+												width: '100%',
+												backgroundColor: themeColor,
+											}}
+										/>
+									)}
+									<div
+										className='flex flex-col'
+										style={{
+											padding: '0 80px',
+										}}
+									>
+										<ResumeprofilePDF
+											profile={profile}
+											themeColor={themeColor}
+										/>
+									</div>
 								</div>
 							</div>
 						</TransformComponent>
