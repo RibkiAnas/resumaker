@@ -38,7 +38,7 @@ export const BaseForm = ({
 }) => (
 	<fieldset
 		className={cn(
-			'grid gap-6 rounded-lg border p-3 mb-3 transition-opacity duration-200',
+			'grid gap-6 rounded-lg border p-3 transition-opacity duration-200',
 			className
 		)}
 	>

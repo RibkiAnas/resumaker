@@ -15,7 +15,7 @@ export const ProfileForm = () => {
 	};
 
 	return (
-		<fieldset className='grid gap-6 rounded-lg border p-4 mb-3'>
+		<fieldset className='grid gap-6 rounded-lg border p-4'>
 			<legend className='-ml-1 px-1 text-sm font-medium'>Profile</legend>
 			<div className='grid gap-3'>
 				<Label htmlFor='name'>Name</Label>
