@@ -38,7 +38,7 @@ export const BaseForm = ({
 }) => (
 	<fieldset
 		className={cn(
-			'grid gap-6 rounded-lg border p-3 transition-opacity duration-200',
+			'grid gap-6 rounded-lg border p-3 mb-3 transition-opacity duration-200',
 			className
 		)}
 	>
@@ -58,10 +58,12 @@ export const Form = ({
 	form,
 	addButtonText,
 	children,
+	className,
 }: {
 	form: ShowForm;
 	addButtonText?: string;
 	children: React.ReactNode;
+	className?: string;
 }) => {
 	const showForm = useAppSelector(selectShowByForm(form));
 	const heading = useAppSelector(selectHeadingByForm(form));
@@ -87,7 +89,7 @@ export const Form = ({
 		<BaseForm
 			className={`transition-opacity duration-200 ${
 				showForm ? 'pb-6' : 'pb-2 opacity-60'
-			}`}
+			} ${className}`}
 		>
 			<div className='flex items-center justify-between gap-4 p-1'>
 				<div className='flex grow items-center gap-2'>
