@@ -46,6 +46,7 @@ import {
 } from '~/lib/constants';
 import { ResumeprofilePDF } from './resume/resume-profile-pdf';
 import { ResumePDFWorkExperience } from './resume/resume-pdf-work-experience';
+import { ResumePDFEducation } from './resume/resume-pdf-education';
 
 const formTypeToComponent: { [type in ShowForm]: () => JSX.Element } = {
 	workExperiences: WorkexperiencesForm,
@@ -66,7 +67,7 @@ function ResumeDisplay({
 }) {
 	const templateRef = useRef(null);
 	const resumee = useAppSelector(selectResume);
-	const { profile, workExperiences } = resumee;
+	const { profile, workExperiences, educations } = resumee;
 	const settings = useAppSelector(selectSettings);
 	const isA4 = settings.documentSize === 'A4';
 	const width = isA4 ? A4_WIDTH_PX : LETTER_WIDTH_PX;
@@ -80,7 +81,7 @@ function ResumeDisplay({
 		removeAfterPrint: true,
 	});
 
-	const { formToHeading, formToShow, formsOrder } = settings;
+	const { formToHeading, formToShow, formsOrder, showBulletPoints } = settings;
 
 	const builderFormsOrder = useAppSelector(selectFormsOrder);
 
@@ -94,7 +95,14 @@ function ResumeDisplay({
 				themeColor={themeColor}
 			/>
 		),
-		educations: () => <></>,
+		educations: () => (
+			<ResumePDFEducation
+				heading={formToHeading['educations']}
+				educations={educations}
+				themeColor={themeColor}
+				showBulletPoints={showBulletPoints['educations']}
+			/>
+		),
 		projects: () => <></>,
 		skills: () => <></>,
 		custom: () => <></>,
