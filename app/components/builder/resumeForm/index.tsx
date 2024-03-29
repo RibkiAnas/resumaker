@@ -29,13 +29,13 @@ function ResumeForms() {
 	return (
 		<ScrollArea className='grid gap-6 p-4 pt-0 h-screen'>
 			<ProfileForm />
-			<div className='mt-10 invisible'>invisible</div>
+			<div className='mt-2 invisible'>invisible</div>
 			{formsOrder.map((form) => {
 				const Component = formTypeToComponent[form];
 				return (
 					<>
 						<Component key={form} />
-						<div className='mt-10 invisible'>invisible</div>
+						<div className='mt-2 invisible'>invisible</div>
 					</>
 				);
 			})}

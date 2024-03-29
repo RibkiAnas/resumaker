@@ -30,6 +30,7 @@ import {
 } from '../ui/dropdown-menu';
 import { Form, Link } from '@remix-run/react';
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react';
+import { ThemeForm } from './resumeForm/themeForm';
 
 interface ResumeBuilderProps {
 	resume: { id: string; title: string | null; content: unknown };
@@ -184,7 +185,7 @@ function ResumeBuilder({
 							<ResumeForms />
 						</TabsContent>
 						<TabsContent value='customizer'>
-							<ResumeForms />
+							<ThemeForm />
 						</TabsContent>
 					</Tabs>
 				</ResizablePanel>
