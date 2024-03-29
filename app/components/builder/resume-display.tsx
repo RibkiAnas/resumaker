@@ -40,13 +40,14 @@ import { ProfileForm } from './resumeForm/profile-form';
 import { selectFormsOrder, ShowForm } from '~/lib/redux/settingsSlice';
 import { WorkexperiencesForm } from './resumeForm/work-experiences-form';
 import { useAppSelector } from '~/lib/redux/hooks';
+import { EducationsForm } from './resumeForm/educations-form';
 
 const formTypeToComponent: { [type in ShowForm]: () => JSX.Element } = {
-  workExperiences: WorkexperiencesForm,
-  educations: () => <></>,
-  projects: () => <></>,
-  skills: () => <></>,
-  custom: () => <></>,
+	workExperiences: WorkexperiencesForm,
+	educations: EducationsForm,
+	projects: () => <></>,
+	skills: () => <></>,
+	custom: () => <></>,
 };
 
 function ResumeDisplay({
@@ -67,7 +68,7 @@ function ResumeDisplay({
 		removeAfterPrint: true,
 	});
 
-  const formsOrder = useAppSelector(selectFormsOrder);
+	const formsOrder = useAppSelector(selectFormsOrder);
 
 	return (
 		<div className='flex h-[100vh] flex-col'>
@@ -88,10 +89,10 @@ function ResumeDisplay({
 						</DrawerHeader>
 						<form className='grid w-full items-start gap-6 overflow-auto p-4 pt-0'>
 							<ProfileForm />
-              {formsOrder.map((form) => {
-                const Component = formTypeToComponent[form];
-                return <Component key={form} />;
-              })}
+							{formsOrder.map((form) => {
+								const Component = formTypeToComponent[form];
+								return <Component key={form} />;
+							})}
 						</form>
 					</DrawerContent>
 				</Drawer>
