@@ -45,6 +45,7 @@ import {
 	LETTER_WIDTH_PX,
 } from '~/lib/constants';
 import { ResumeprofilePDF } from './resume/resume-profile-pdf';
+import { ResumePDFWorkExperience } from './resume/resume-pdf-work-experience';
 
 const formTypeToComponent: { [type in ShowForm]: () => JSX.Element } = {
 	workExperiences: WorkexperiencesForm,
@@ -65,7 +66,7 @@ function ResumeDisplay({
 }) {
 	const templateRef = useRef(null);
 	const resumee = useAppSelector(selectResume);
-	const { profile } = resumee;
+	const { profile, workExperiences } = resumee;
 	const settings = useAppSelector(selectSettings);
 	const isA4 = settings.documentSize === 'A4';
 	const width = isA4 ? A4_WIDTH_PX : LETTER_WIDTH_PX;
@@ -79,7 +80,25 @@ function ResumeDisplay({
 		removeAfterPrint: true,
 	});
 
-	const formsOrder = useAppSelector(selectFormsOrder);
+	const { formToHeading, formToShow, formsOrder } = settings;
+
+	const builderFormsOrder = useAppSelector(selectFormsOrder);
+
+	const showFormsOrder = formsOrder.filter((form) => formToShow[form]);
+
+	const resumeFormTypeToComponent: { [type in ShowForm]: () => JSX.Element } = {
+		workExperiences: () => (
+			<ResumePDFWorkExperience
+				heading={formToHeading['workExperiences']}
+				workExperiences={workExperiences}
+				themeColor={themeColor}
+			/>
+		),
+		educations: () => <></>,
+		projects: () => <></>,
+		skills: () => <></>,
+		custom: () => <></>,
+	};
 
 	return (
 		<div className='flex h-[100vh] flex-col'>
@@ -98,7 +117,7 @@ function ResumeDisplay({
 						</DrawerHeader>
 						<form className='grid w-full items-start gap-6 overflow-auto p-4 pt-0'>
 							<ProfileForm />
-							{formsOrder.map((form) => {
+							{builderFormsOrder.map((form) => {
 								const Component = formTypeToComponent[form];
 								return <Component key={form} />;
 							})}
@@ -183,6 +202,10 @@ function ResumeDisplay({
 											profile={profile}
 											themeColor={themeColor}
 										/>
+										{showFormsOrder.map((form) => {
+											const Component = resumeFormTypeToComponent[form];
+											return <Component key={form} />;
+										})}
 									</div>
 								</div>
 							</div>
