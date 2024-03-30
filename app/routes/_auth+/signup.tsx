@@ -109,7 +109,7 @@ export function SignupEmail({
 		<E.Html lang='en' dir='ltr'>
 			<E.Container>
 				<h1>
-					<E.Text>Welcome to Epic Notes!</E.Text>
+					<E.Text>Welcome to Resumaker!</E.Text>
 				</h1>
 				<p>
 					<E.Text>
@@ -157,7 +157,7 @@ export default function SignupRoute() {
 			<div className='grid gap-6'>
 				<Form method='POST' {...form.props}>
 					<div className='grid gap-2'>
-						<div className='grid gap-1'>
+						<div className='grid gap-4'>
 							<AuthenticityTokenInput />
 							<div style={{ display: 'none' }} aria-hidden>
 								<label htmlFor='name__confirm-input'>
@@ -170,18 +170,20 @@ export default function SignupRoute() {
 									tabIndex={-1}
 								/>
 							</div>
-							<Field
-								labelProps={{
-									htmlFor: fields.email.id,
-									children: 'Email',
-								}}
-								inputProps={{
-									...conform.input(fields.email),
-									autoFocus: true,
-									placeholder: 'name@example.com',
-								}}
-								errors={fields.email.errors}
-							/>
+							<div className='space-y-2'>
+								<Field
+									labelProps={{
+										htmlFor: fields.email.id,
+										children: 'Email',
+									}}
+									inputProps={{
+										...conform.input(fields.email),
+										autoFocus: true,
+										placeholder: 'name@example.com',
+									}}
+									errors={fields.email.errors}
+								/>
+							</div>
 							<input
 								{...conform.input(fields.redirectTo, { type: 'hidden' })}
 							/>
@@ -218,7 +220,7 @@ export default function SignupRoute() {
 }
 
 export const meta: MetaFunction = () => {
-	return [{ title: 'Sign Up | Epic Notes' }];
+	return [{ title: 'Sign Up | Resumaker' }];
 };
 
 export function ErrorBoundary() {

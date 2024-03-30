@@ -273,30 +273,33 @@ export default function LoginPage() {
 				</p>
 			</div>
 			<div className='grid gap-6'>
-				<Form method='POST' {...form.props}>
+				<Form className='space-y-6' method='POST' {...form.props}>
 					<AuthenticityTokenInput />
 					<div style={{ display: 'none' }} aria-hidden>
 						<label htmlFor='name-input'>Please leave this field blank</label>
 						<input id='name-input' name='name' type='text' tabIndex={-1} />
 					</div>
-					<Field
-						labelProps={{ children: 'Username' }}
-						inputProps={{
-							...conform.input(fields.username),
-							autoFocus: true,
-							className: 'lowercase',
-							placeholder: 'username',
-						}}
-						errors={fields.username.errors}
-					/>
-
-					<Field
-						labelProps={{ children: 'Password' }}
-						inputProps={conform.input(fields.password, {
-							type: 'password',
-						})}
-						errors={fields.password.errors}
-					/>
+					<div className='space-y-2'>
+						<Field
+							labelProps={{ children: 'Username' }}
+							inputProps={{
+								...conform.input(fields.username),
+								autoFocus: true,
+								className: 'lowercase',
+								placeholder: 'username',
+							}}
+							errors={fields.username.errors}
+						/>
+					</div>
+					<div className='space-y-2'>
+						<Field
+							labelProps={{ children: 'Password' }}
+							inputProps={conform.input(fields.password, {
+								type: 'password',
+							})}
+							errors={fields.password.errors}
+						/>
+					</div>
 
 					<div className='flex justify-between text-sm'>
 						<CheckboxField
@@ -364,7 +367,7 @@ export default function LoginPage() {
 }
 
 export const meta: MetaFunction = () => {
-	return [{ title: 'Login to Epic Notes' }];
+	return [{ title: 'Login to Resumaker' }];
 };
 
 export function ErrorBoundary() {

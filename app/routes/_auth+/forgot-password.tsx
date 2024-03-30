@@ -76,7 +76,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
 	const response = await sendEmail({
 		context,
 		to: user?.email ?? 'd',
-		subject: `Epic Notes Password Reset`,
+		subject: `Resumaker Password Reset`,
 		react: (
 			<ForgotPasswordEmail onboardingUrl={verifyUrl.toString()} otp={otp} />
 		),
@@ -146,9 +146,13 @@ export default function ForgotPasswordRoute() {
 			</div>
 
 			<div className='grid gap-6'>
-				<forgotPassword.Form method='POST' {...form.props}>
+				<forgotPassword.Form
+					className='space-y-6'
+					method='POST'
+					{...form.props}
+				>
 					<AuthenticityTokenInput />
-					<div>
+					<div className='space-y-2'>
 						<Field
 							labelProps={{
 								htmlFor: fields.usernameOrEmail.id,

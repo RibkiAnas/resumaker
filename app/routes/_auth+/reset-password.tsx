@@ -142,38 +142,44 @@ export default function ResetPasswordPage() {
 	});
 
 	return (
-		<div className='container flex flex-col justify-center pb-32 pt-20'>
-			<div className='text-center'>
-				<h1 className='text-h1'>Password Reset</h1>
-				<p className='mt-3 text-body-md text-muted-foreground'>
+		<>
+			<div className='flex flex-col space-y-2 text-center'>
+				<h1 className='text-2xl font-semibold tracking-tight'>
+					Password Reset
+				</h1>
+				<p className='text-sm text-muted-foreground'>
 					Hi, {data.resetPasswordUsername}. No worries. It happens all the time.
 				</p>
 			</div>
-			<div className='mx-auto mt-16 min-w-[368px] max-w-sm'>
-				<Form method='POST' {...form.props}>
-					<Field
-						labelProps={{
-							htmlFor: fields.password.id,
-							children: 'New Password',
-						}}
-						inputProps={{
-							...conform.input(fields.password, { type: 'password' }),
-							autoComplete: 'new-password',
-							autoFocus: true,
-						}}
-						errors={fields.password.errors}
-					/>
-					<Field
-						labelProps={{
-							htmlFor: fields.confirmPassword.id,
-							children: 'Confirm Password',
-						}}
-						inputProps={{
-							...conform.input(fields.confirmPassword, { type: 'password' }),
-							autoComplete: 'new-password',
-						}}
-						errors={fields.confirmPassword.errors}
-					/>
+			<div className='grid gap-6'>
+				<Form className='space-y-6' method='POST' {...form.props}>
+					<div className='space-y-2'>
+						<Field
+							labelProps={{
+								htmlFor: fields.password.id,
+								children: 'New Password',
+							}}
+							inputProps={{
+								...conform.input(fields.password, { type: 'password' }),
+								autoComplete: 'new-password',
+								autoFocus: true,
+							}}
+							errors={fields.password.errors}
+						/>
+					</div>
+					<div className='space-y-2'>
+						<Field
+							labelProps={{
+								htmlFor: fields.confirmPassword.id,
+								children: 'Confirm Password',
+							}}
+							inputProps={{
+								...conform.input(fields.confirmPassword, { type: 'password' }),
+								autoComplete: 'new-password',
+							}}
+							errors={fields.confirmPassword.errors}
+						/>
+					</div>
 
 					<ErrorList errors={form.errors} id={form.errorId} />
 
@@ -187,7 +193,7 @@ export default function ResetPasswordPage() {
 					</StatusButton>
 				</Form>
 			</div>
-		</div>
+		</>
 	);
 }
 

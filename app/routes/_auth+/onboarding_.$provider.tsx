@@ -223,7 +223,7 @@ export default function SignupRoute() {
 			<div className='grid gap-6 min-h-full '>
 				<Form
 					method='POST'
-					className='mx-auto min-w-[368px] max-w-sm'
+					className='mx-auto min-w-[368px] max-w-sm space-y-6'
 					{...form.props}
 				>
 					{fields.imageUrl.defaultValue ? (
@@ -239,46 +239,51 @@ export default function SignupRoute() {
 							<input {...conform.input(fields.imageUrl, { type: 'hidden' })} />
 						</div>
 					) : null}
-					<Field
-						labelProps={{ htmlFor: fields.username.id, children: 'Username' }}
-						inputProps={{
-							...conform.input(fields.username),
-							autoComplete: 'username',
-							className: 'lowercase',
-						}}
-						errors={fields.username.errors}
-					/>
-					<Field
-						labelProps={{ htmlFor: fields.name.id, children: 'Name' }}
-						inputProps={{
-							...conform.input(fields.name),
-							autoComplete: 'name',
-						}}
-						errors={fields.name.errors}
-					/>
-
-					<CheckboxField
-						labelProps={{
-							htmlFor: fields.agreeToTermsOfServiceAndPrivacyPolicy.id,
-							children:
-								'Do you agree to our Terms of Service and Privacy Policy?',
-							className: 'text-sm',
-						}}
-						buttonProps={conform.input(
-							fields.agreeToTermsOfServiceAndPrivacyPolicy,
-							{ type: 'checkbox' }
-						)}
-						errors={fields.agreeToTermsOfServiceAndPrivacyPolicy.errors}
-					/>
-					<CheckboxField
-						labelProps={{
-							htmlFor: fields.remember.id,
-							children: 'Remember me',
-							className: 'text-sm',
-						}}
-						buttonProps={conform.input(fields.remember, { type: 'checkbox' })}
-						errors={fields.remember.errors}
-					/>
+					<div className='space-y-2'>
+						<Field
+							labelProps={{ htmlFor: fields.username.id, children: 'Username' }}
+							inputProps={{
+								...conform.input(fields.username),
+								autoComplete: 'username',
+								className: 'lowercase',
+							}}
+							errors={fields.username.errors}
+						/>
+					</div>
+					<div className='space-y-2'>
+						<Field
+							labelProps={{ htmlFor: fields.name.id, children: 'Name' }}
+							inputProps={{
+								...conform.input(fields.name),
+								autoComplete: 'name',
+							}}
+							errors={fields.name.errors}
+						/>
+					</div>
+					<div>
+						<CheckboxField
+							labelProps={{
+								htmlFor: fields.agreeToTermsOfServiceAndPrivacyPolicy.id,
+								children:
+									'Do you agree to our Terms of Service and Privacy Policy?',
+								className: 'text-sm',
+							}}
+							buttonProps={conform.input(
+								fields.agreeToTermsOfServiceAndPrivacyPolicy,
+								{ type: 'checkbox' }
+							)}
+							errors={fields.agreeToTermsOfServiceAndPrivacyPolicy.errors}
+						/>
+						<CheckboxField
+							labelProps={{
+								htmlFor: fields.remember.id,
+								children: 'Remember me',
+								className: 'text-sm',
+							}}
+							buttonProps={conform.input(fields.remember, { type: 'checkbox' })}
+							errors={fields.remember.errors}
+						/>
+					</div>
 
 					{redirectTo ? (
 						<input type='hidden' name='redirectTo' value={redirectTo} />

@@ -373,16 +373,19 @@ export default function VerifyRoute() {
 						<ErrorList errors={form.errors} id={form.errorId} />
 					</div>
 					<div className='grid gap-6'>
-						<Form method='POST' {...form.props} className='flex-1'>
+						<Form method='POST' {...form.props} className='flex-1 space-y-8'>
 							<AuthenticityTokenInput />
-							<Field
-								labelProps={{
-									htmlFor: fields[codeQueryParam].id,
-									children: 'Code',
-								}}
-								inputProps={conform.input(fields[codeQueryParam])}
-								errors={fields[codeQueryParam].errors}
-							/>
+							<div className='space-y-2'>
+								<Field
+									labelProps={{
+										htmlFor: fields[codeQueryParam].id,
+										children: 'Code',
+									}}
+									inputProps={conform.input(fields[codeQueryParam])}
+									errors={fields[codeQueryParam].errors}
+								/>
+							</div>
+
 							<input
 								{...conform.input(fields[typeQueryParam], { type: 'hidden' })}
 							/>

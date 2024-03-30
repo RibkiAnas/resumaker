@@ -197,72 +197,81 @@ export default function SignupRoute() {
 			<div className='grid gap-6'>
 				<Form
 					method='POST'
-					className='mx-auto min-w-[368px] max-w-sm'
+					className='mx-auto min-w-[368px] max-w-sm space-y-6'
 					{...form.props}
 				>
 					<AuthenticityTokenInput />
-					<Field
-						labelProps={{ htmlFor: fields.username.id, children: 'Username' }}
-						inputProps={{
-							...conform.input(fields.username),
-							autoComplete: 'username',
-							className: 'lowercase',
-							placeholder: 'harrison_johnson',
-						}}
-						errors={fields.username.errors}
-					/>
-					<Field
-						labelProps={{ htmlFor: fields.name.id, children: 'Name' }}
-						inputProps={{
-							...conform.input(fields.name),
-							autoComplete: 'name',
-							placeholder: 'Harrison Johnson',
-						}}
-						errors={fields.name.errors}
-					/>
-					<Field
-						labelProps={{ htmlFor: fields.password.id, children: 'Password' }}
-						inputProps={{
-							...conform.input(fields.password, { type: 'password' }),
-							autoComplete: 'new-password',
-						}}
-						errors={fields.password.errors}
-					/>
+					<div className='space-y-2'>
+						<Field
+							labelProps={{ htmlFor: fields.username.id, children: 'Username' }}
+							inputProps={{
+								...conform.input(fields.username),
+								autoComplete: 'username',
+								className: 'lowercase',
+								placeholder: 'harrison_johnson',
+							}}
+							errors={fields.username.errors}
+						/>
+					</div>
+					<div className='space-y-2'>
+						<Field
+							labelProps={{ htmlFor: fields.name.id, children: 'Name' }}
+							inputProps={{
+								...conform.input(fields.name),
+								autoComplete: 'name',
+								placeholder: 'Harrison Johnson',
+							}}
+							errors={fields.name.errors}
+						/>
+					</div>
+					<div className='space-y-2'>
+						<Field
+							labelProps={{ htmlFor: fields.password.id, children: 'Password' }}
+							inputProps={{
+								...conform.input(fields.password, { type: 'password' }),
+								autoComplete: 'new-password',
+							}}
+							errors={fields.password.errors}
+						/>
+					</div>
+					<div className='space-y-2'>
+						<Field
+							labelProps={{
+								htmlFor: fields.confirmPassword.id,
+								children: 'Confirm Password',
+							}}
+							inputProps={{
+								...conform.input(fields.confirmPassword, { type: 'password' }),
+								autoComplete: 'new-password',
+							}}
+							errors={fields.confirmPassword.errors}
+						/>
+					</div>
 
-					<Field
-						labelProps={{
-							htmlFor: fields.confirmPassword.id,
-							children: 'Confirm Password',
-						}}
-						inputProps={{
-							...conform.input(fields.confirmPassword, { type: 'password' }),
-							autoComplete: 'new-password',
-						}}
-						errors={fields.confirmPassword.errors}
-					/>
-
-					<CheckboxField
-						labelProps={{
-							htmlFor: fields.agreeToTermsOfServiceAndPrivacyPolicy.id,
-							children:
-								'Do you agree to our Terms of Service and Privacy Policy?',
-							className: 'text-sm',
-						}}
-						buttonProps={conform.input(
-							fields.agreeToTermsOfServiceAndPrivacyPolicy,
-							{ type: 'checkbox' }
-						)}
-						errors={fields.agreeToTermsOfServiceAndPrivacyPolicy.errors}
-					/>
-					<CheckboxField
-						labelProps={{
-							htmlFor: fields.remember.id,
-							children: 'Remember me',
-							className: 'text-sm',
-						}}
-						buttonProps={conform.input(fields.remember, { type: 'checkbox' })}
-						errors={fields.remember.errors}
-					/>
+					<div>
+						<CheckboxField
+							labelProps={{
+								htmlFor: fields.agreeToTermsOfServiceAndPrivacyPolicy.id,
+								children:
+									'Do you agree to our Terms of Service and Privacy Policy?',
+								className: 'text-sm',
+							}}
+							buttonProps={conform.input(
+								fields.agreeToTermsOfServiceAndPrivacyPolicy,
+								{ type: 'checkbox' }
+							)}
+							errors={fields.agreeToTermsOfServiceAndPrivacyPolicy.errors}
+						/>
+						<CheckboxField
+							labelProps={{
+								htmlFor: fields.remember.id,
+								children: 'Remember me',
+								className: 'text-sm',
+							}}
+							buttonProps={conform.input(fields.remember, { type: 'checkbox' })}
+							errors={fields.remember.errors}
+						/>
+					</div>
 
 					<input {...conform.input(fields.redirectTo, { type: 'hidden' })} />
 					<ErrorList errors={form.errors} id={form.errorId} />
