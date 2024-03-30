@@ -8,7 +8,6 @@ import { store } from '~/lib/redux/store';
 import { requireUser } from '~/utils/auth.server';
 import { buildDbClient } from '~/utils/client';
 import { invariantResponse } from '~/utils/misc';
-import { useOptionalUser } from '~/utils/user';
 
 export const loader = async ({
 	request,
@@ -58,14 +57,11 @@ export const loader = async ({
 };
 
 function BuilderPage() {
-	const data = useLoaderData<typeof loader>();
-	const user = data.user;
-	const loggedInUser = useOptionalUser();
-	const isLoggedInUser = user.id === loggedInUser?.id;
+	const data = useLoaderData();
 
 	return (
 		<Provider store={store}>
-			<ResumeBuilder resume={data?.resume} isLoggedInUser={isLoggedInUser} />
+			<ResumeBuilder resume={data?.resume} />
 		</Provider>
 	);
 }
