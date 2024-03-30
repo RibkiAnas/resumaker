@@ -23,6 +23,7 @@ import { getUserImgSrc, invariantResponse, useDoubleCheck } from '~/utils/misc';
 import { sessionStorage } from '~/utils/session.server';
 import { NameSchema, UsernameSchema } from '~/utils/user-validation';
 import { twoFAVerificationType } from '../two-factor/_layout';
+import { Separator } from '~/components/ui/separator';
 
 const ProfileFormSchema = z.object({
 	name: NameSchema.optional(),
@@ -101,7 +102,14 @@ export default function EditUserProfile() {
 
 	return (
 		<div className='space-y-6'>
-			<div className='flex flex-col gap-12'>
+			<div>
+				<h3 className='text-lg font-medium'>Profile</h3>
+				<p className='text-sm text-muted-foreground'>
+					This is how others will see you on the site.
+				</p>
+			</div>
+			<Separator />
+			<div className='flex flex-col gap-6'>
 				<div className='flex justify-center'>
 					<div className='relative h-[100px] w-[100px]'>
 						<img
@@ -204,9 +212,9 @@ function UpdateProfile() {
 	});
 
 	return (
-		<fetcher.Form method='POST' {...form.props}>
+		<fetcher.Form className='space-y-8' method='POST' {...form.props}>
 			<AuthenticityTokenInput />
-			<div className='grid grid-cols-6 gap-x-10'>
+			<div className='space-y-2'>
 				<Field
 					className='col-span-3'
 					labelProps={{
@@ -216,6 +224,8 @@ function UpdateProfile() {
 					inputProps={conform.input(fields.username)}
 					errors={fields.username.errors}
 				/>
+			</div>
+			<div className='space-y-2'>
 				<Field
 					className='col-span-3'
 					labelProps={{ htmlFor: fields.name.id, children: 'Name' }}
@@ -223,25 +233,19 @@ function UpdateProfile() {
 					errors={fields.name.errors}
 				/>
 			</div>
-
 			<ErrorList errors={form.errors} id={form.errorId} />
 
-			<div className='mt-8 flex justify-center'>
-				<StatusButton
-					type='submit'
-					size='wide'
-					name='intent'
-					value={profileUpdateActionIntent}
-					status={
-						fetcher.state !== 'idle'
-							? 'pending'
-							: fetcher.data?.status ?? 'idle'
-					}
-					className='w-full'
-				>
-					Save changes
-				</StatusButton>
-			</div>
+			<StatusButton
+				type='submit'
+				size='wide'
+				name='intent'
+				value={profileUpdateActionIntent}
+				status={
+					fetcher.state !== 'idle' ? 'pending' : fetcher.data?.status ?? 'idle'
+				}
+			>
+				Save changes
+			</StatusButton>
 		</fetcher.Form>
 	);
 }

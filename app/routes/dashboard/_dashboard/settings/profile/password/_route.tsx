@@ -1,27 +1,28 @@
-import { conform, useForm } from "@conform-to/react";
-import { getFieldsetConstraint, parse } from "@conform-to/zod";
-import { ActionFunctionArgs, json, redirect } from "@remix-run/cloudflare";
-import { Form, Link, useActionData } from "@remix-run/react";
-import { eq } from "drizzle-orm";
-import { AuthenticityTokenInput } from "remix-utils/csrf/react";
-import { z } from "zod";
-import { ErrorList, Field } from "~/components/forms";
-import { Button } from "~/components/ui/button";
-import { Icon } from "~/components/ui/icon";
-import { StatusButton } from "~/components/ui/status-button";
-import { password } from "~/drizzle/schema.server";
+import { conform, useForm } from '@conform-to/react';
+import { getFieldsetConstraint, parse } from '@conform-to/zod';
+import { ActionFunctionArgs, json, redirect } from '@remix-run/cloudflare';
+import { Form, Link, useActionData } from '@remix-run/react';
+import { eq } from 'drizzle-orm';
+import { AuthenticityTokenInput } from 'remix-utils/csrf/react';
+import { z } from 'zod';
+import { ErrorList, Field } from '~/components/forms';
+import { Button } from '~/components/ui/button';
+import { Icon } from '~/components/ui/icon';
+import { Separator } from '~/components/ui/separator';
+import { StatusButton } from '~/components/ui/status-button';
+import { password } from '~/drizzle/schema.server';
 import {
 	getPasswordHash,
 	requireUserId,
 	verifyUserPassword,
-} from "~/utils/auth.server";
-import { buildDbClient } from "~/utils/client";
-import { validateCSRF } from "~/utils/csrf.server";
-import { useIsPending } from "~/utils/misc";
-import { PasswordSchema } from "~/utils/user-validation";
+} from '~/utils/auth.server';
+import { buildDbClient } from '~/utils/client';
+import { validateCSRF } from '~/utils/csrf.server';
+import { useIsPending } from '~/utils/misc';
+import { PasswordSchema } from '~/utils/user-validation';
 
 export const handle = {
-	breadcrumb: <Icon name="dots-horizontal">Password</Icon>,
+	breadcrumb: <Icon name='dots-horizontal'>Password</Icon>,
 };
 
 const ChangePasswordForm = z
@@ -33,9 +34,9 @@ const ChangePasswordForm = z
 	.superRefine(({ confirmNewPassword, newPassword }, ctx) => {
 		if (confirmNewPassword !== newPassword) {
 			ctx.addIssue({
-				path: ["confirmNewPassword"],
-				code: "custom",
-				message: "The passwords must match",
+				path: ['confirmNewPassword'],
+				code: 'custom',
+				message: 'The passwords must match',
 			});
 		}
 	});
@@ -59,9 +60,9 @@ export async function action({ request, context }: ActionFunctionArgs) {
 
 					if (!user) {
 						ctx.addIssue({
-							path: ["currentPassword"],
-							code: "custom",
-							message: "Incorrect password.",
+							path: ['currentPassword'],
+							code: 'custom',
+							message: 'Incorrect password.',
 						});
 					}
 				}
@@ -70,13 +71,13 @@ export async function action({ request, context }: ActionFunctionArgs) {
 	});
 	// clear the payload so we don't send the password back to the client
 	submission.payload = {};
-	if (submission.intent !== "submit") {
+	if (submission.intent !== 'submit') {
 		// clear the value so we don't send the password back to the client
 		submission.value = undefined;
-		return json({ status: "idle", submission } as const);
+		return json({ status: 'idle', submission } as const);
 	}
 	if (!submission.value) {
-		return json({ status: "error", submission } as const, { status: 400 });
+		return json({ status: 'error', submission } as const, { status: 400 });
 	}
 
 	const { newPassword } = submission.value;
@@ -89,7 +90,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
 		})
 		.where(eq(password.userId, userId));
 
-	return redirect(`/settings/profile`);
+	return redirect(`/dashboard/settings/profile`);
 }
 
 export default function ChangePasswordRoute() {
@@ -97,47 +98,64 @@ export default function ChangePasswordRoute() {
 	const isPending = useIsPending();
 
 	const [form, fields] = useForm({
-		id: "signup-form",
+		id: 'signup-form',
 		constraint: getFieldsetConstraint(ChangePasswordForm),
 		lastSubmission: actionData?.submission,
 		onValidate({ formData }) {
 			return parse(formData, { schema: ChangePasswordForm });
 		},
-		shouldRevalidate: "onBlur",
+		shouldRevalidate: 'onBlur',
 	});
 
 	return (
-		<Form method="POST" {...form.props} className="mx-auto max-w-md">
-			<AuthenticityTokenInput />
-			<Field
-				labelProps={{ children: "Current Password" }}
-				inputProps={conform.input(fields.currentPassword, { type: "password" })}
-				errors={fields.currentPassword.errors}
-			/>
-			<Field
-				labelProps={{ children: "New Password" }}
-				inputProps={conform.input(fields.newPassword, { type: "password" })}
-				errors={fields.newPassword.errors}
-			/>
-			<Field
-				labelProps={{ children: "Confirm New Password" }}
-				inputProps={conform.input(fields.confirmNewPassword, {
-					type: "password",
-				})}
-				errors={fields.confirmNewPassword.errors}
-			/>
-			<ErrorList id={form.errorId} errors={form.errors} />
-			<div className="grid w-full grid-cols-2 gap-6">
-				<Button variant="secondary" asChild>
-					<Link to="..">Cancel</Link>
-				</Button>
-				<StatusButton
-					type="submit"
-					status={isPending ? "pending" : actionData?.status ?? "idle"}
-				>
-					Change Password
-				</StatusButton>
+		<div className='space-y-6'>
+			<div>
+				<h3 className='text-lg font-medium'>Change Password</h3>
+				<p className='text-sm text-muted-foreground'>
+					Change your password account.
+				</p>
 			</div>
-		</Form>
+			<Separator />
+			<Form className='space-y-8' method='POST' {...form.props}>
+				<AuthenticityTokenInput />
+				<div className='space-y-2'>
+					<Field
+						labelProps={{ children: 'Current Password' }}
+						inputProps={conform.input(fields.currentPassword, {
+							type: 'password',
+						})}
+						errors={fields.currentPassword.errors}
+					/>
+				</div>
+				<div className='space-y-2'>
+					<Field
+						labelProps={{ children: 'New Password' }}
+						inputProps={conform.input(fields.newPassword, { type: 'password' })}
+						errors={fields.newPassword.errors}
+					/>
+				</div>
+				<div className='space-y-2'>
+					<Field
+						labelProps={{ children: 'Confirm New Password' }}
+						inputProps={conform.input(fields.confirmNewPassword, {
+							type: 'password',
+						})}
+						errors={fields.confirmNewPassword.errors}
+					/>
+				</div>
+				<ErrorList id={form.errorId} errors={form.errors} />
+				<div className='grid w-full grid-cols-2 gap-6'>
+					<Button variant='secondary' asChild>
+						<Link to='..'>Cancel</Link>
+					</Button>
+					<StatusButton
+						type='submit'
+						status={isPending ? 'pending' : actionData?.status ?? 'idle'}
+					>
+						Change Password
+					</StatusButton>
+				</div>
+			</Form>
+		</div>
 	);
 }

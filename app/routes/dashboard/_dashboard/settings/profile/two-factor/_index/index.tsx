@@ -18,6 +18,7 @@ import { createId } from '@paralleldrive/cuid2';
 import { and, eq } from 'drizzle-orm';
 import { twoFAVerificationType } from '../_layout';
 import { twoFAVerifyVerificationType } from '../verify/_route';
+import { Separator } from '~/components/ui/separator';
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
 	const userId = await requireUserId(request, context);
@@ -36,6 +37,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
 	const userId = await requireUserId(request, context);
 	const formData = await request.formData();
 	await validateCSRF(formData, request.headers);
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const { otp: _otp, ...config } = generateTOTP();
 	const verificationData = {
 		...config,
@@ -64,9 +66,21 @@ export default function TwoFactorRoute() {
 	const isPending = useIsPending();
 
 	return (
-		<div className='flex flex-col gap-4'>
+		<div className='space-y-6'>
+			<div>
+				<h3 className='text-lg font-medium'>Two Factor Authentication</h3>
+				<p className='text-sm text-muted-foreground'>
+					Two factor authentication adds an extra layer of security to your
+					account. You will need to enter a code from an authenticator app like{' '}
+					<a className='underline' href='https://1password.com/'>
+						1Password
+					</a>{' '}
+					to log in.
+				</p>
+			</div>
+			<Separator />
 			{data.isTwoFAEnabled ? (
-				<>
+				<div className='space-y-8'>
 					<p className='text-lg'>
 						<Icon name='check'>
 							You have enabled two-factor authentication.
@@ -75,24 +89,26 @@ export default function TwoFactorRoute() {
 					<Link to='disable'>
 						<Icon name='lock-open-1'>Disable 2FA</Icon>
 					</Link>
-				</>
+				</div>
 			) : (
-				<>
-					<p>
-						<Icon name='lock-open-1'>
-							You have not enabled two-factor authentication yet.
-						</Icon>
-					</p>
-					<p className='text-sm'>
-						Two factor authentication adds an extra layer of security to your
-						account. You will need to enter a code from an authenticator app
-						like{' '}
-						<a className='underline' href='https://1password.com/'>
-							1Password
-						</a>{' '}
-						to log in.
-					</p>
-					<Form method='POST'>
+				<div className='space-y-8'>
+					<div className='space-y-2'>
+						<p>
+							<Icon name='lock-open-1'>
+								You have not enabled two-factor authentication yet.
+							</Icon>
+						</p>
+						<p className='text-sm'>
+							Two factor authentication adds an extra layer of security to your
+							account. You will need to enter a code from an authenticator app
+							like{' '}
+							<a className='underline' href='https://1password.com/'>
+								1Password
+							</a>{' '}
+							to log in.
+						</p>
+					</div>
+					<Form method='POST' className='space-y-2'>
 						<AuthenticityTokenInput />
 						<StatusButton
 							type='submit'
@@ -105,7 +121,7 @@ export default function TwoFactorRoute() {
 							Enable 2FA
 						</StatusButton>
 					</Form>
-				</>
+				</div>
 			)}
 		</div>
 	);

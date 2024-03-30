@@ -166,7 +166,9 @@ export default function TwoFactorRoute() {
 					src={`https://api.qrserver.com/v1/create-qr-code/?data=${data.otpUri}`}
 					className='h-56 w-56'
 				/>
-				<p>Scan this QR code with your authenticator app.</p>
+				<p className='text-sm'>
+					Scan this QR code with your authenticator app.
+				</p>
 				<p className='text-sm'>
 					If you cannot scan the QR code, you can manually add this account to
 					your authenticator app using this code:
@@ -187,16 +189,18 @@ export default function TwoFactorRoute() {
 					you will lose access to your account.
 				</p>
 				<div className='flex w-full max-w-xs flex-col justify-center gap-4'>
-					<Form method='POST' {...form.props} className='flex-1'>
+					<Form method='POST' {...form.props} className='space-y-8'>
 						<AuthenticityTokenInput />
-						<Field
-							labelProps={{
-								htmlFor: fields.code.id,
-								children: 'Code',
-							}}
-							inputProps={{ ...conform.input(fields.code), autoFocus: true }}
-							errors={fields.code.errors}
-						/>
+						<div className='space-y-2'>
+							<Field
+								labelProps={{
+									htmlFor: fields.code.id,
+									children: 'Code',
+								}}
+								inputProps={{ ...conform.input(fields.code), autoFocus: true }}
+								errors={fields.code.errors}
+							/>
+						</div>
 						<div className='flex justify-between gap-4'>
 							<StatusButton
 								className='w-full'

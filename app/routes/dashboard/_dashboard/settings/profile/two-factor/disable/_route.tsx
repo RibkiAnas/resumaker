@@ -82,9 +82,9 @@ export default function TwoFactorDisableRoute() {
 
 	return (
 		<div className='mx-auto max-w-sm'>
-			<Form method='POST'>
+			<Form method='POST' className='space-y-8'>
 				<AuthenticityTokenInput />
-				<p>
+				<p className='text-sm'>
 					Disabling two factor authentication is not recommended. However, if
 					you would like to do so, click here:
 				</p>

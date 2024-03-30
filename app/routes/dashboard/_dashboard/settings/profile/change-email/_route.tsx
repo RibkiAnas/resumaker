@@ -13,6 +13,7 @@ import { AuthenticityTokenInput } from 'remix-utils/csrf/react';
 import { z } from 'zod';
 import { ErrorList, Field } from '~/components/forms';
 import { Icon } from '~/components/ui/icon';
+import { Separator } from '~/components/ui/separator';
 import { StatusButton } from '~/components/ui/status-button';
 import { users } from '~/drizzle/schema.server';
 import {
@@ -76,7 +77,7 @@ export async function handleVerification({
 	});
 
 	throw await redirectWithToast(
-		'/settings/profile',
+		'/dashboard/settings/profile',
 		{
 			title: 'Email Changed',
 			type: 'success',
@@ -238,30 +239,34 @@ export default function ChangeEmailIndex() {
 
 	const isPending = useIsPending();
 	return (
-		<div>
-			<h1 className='text-h1'>Change Email</h1>
-			<p>You will receive an email at the new email address to confirm.</p>
-			<p>
-				An email notice will also be sent to your old address {data.user.email}.
-			</p>
-			<div className='mx-auto mt-5 max-w-sm'>
-				<Form method='POST' {...form.props}>
-					<AuthenticityTokenInput />
+		<div className='space-y-6'>
+			<div>
+				<h3 className='text-lg font-medium'>Change Email</h3>
+				<p className='text-sm text-muted-foreground'>
+					You will receive an email at the new email address to confirm.
+				</p>
+				<p className='text-sm text-muted-foreground'>
+					An email notice will also be sent to your old address{' '}
+					{data.user.email}.
+				</p>
+			</div>
+			<Separator />
+			<Form className='space-y-8' method='POST' {...form.props}>
+				<AuthenticityTokenInput />
+				<div className='space-y-2'>
 					<Field
 						labelProps={{ children: 'New Email' }}
 						inputProps={conform.input(fields.email)}
 						errors={fields.email.errors}
 					/>
-					<ErrorList id={form.errorId} errors={form.errors} />
-					<div>
-						<StatusButton
-							status={isPending ? 'pending' : actionData?.status ?? 'idle'}
-						>
-							Send Confirmation
-						</StatusButton>
-					</div>
-				</Form>
-			</div>
+				</div>
+				<ErrorList id={form.errorId} errors={form.errors} />
+				<StatusButton
+					status={isPending ? 'pending' : actionData?.status ?? 'idle'}
+				>
+					Send Confirmation
+				</StatusButton>
+			</Form>
 		</div>
 	);
 }
