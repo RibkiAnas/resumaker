@@ -1,5 +1,5 @@
 import { json, LoaderFunctionArgs } from '@remix-run/cloudflare';
-import { Form, Link, Outlet, useLoaderData } from '@remix-run/react';
+import { Form, Link, NavLink, Outlet, useLoaderData } from '@remix-run/react';
 import { CircleUser, FileText, Menu, Settings2 } from 'lucide-react';
 
 import { Button } from '~/components/ui/button';
@@ -53,6 +53,7 @@ function BuilderLayout() {
 	const user = data.user;
 	const loggedInUser = useOptionalUser();
 	const isLoggedInUser = user.id === loggedInUser?.id;
+
 	return (
 		<div className='grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]'>
 			<div className='hidden border-r bg-muted/40 md:block'>
@@ -68,20 +69,28 @@ function BuilderLayout() {
 					</div>
 					<div className='flex-1'>
 						<nav className='grid items-start px-2 text-sm font-medium lg:px-4'>
-							<Link
+							<NavLink
 								to='/dashboard/resumes'
-								className='flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
+								className={({ isActive }) =>
+									isActive
+										? 'flex items-center gap-3 rounded-lg px-3 py-2 transition-all text-foreground bg-muted'
+										: 'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
+								}
 							>
 								<FileText className='h-4 w-4' />
 								Resumes
-							</Link>
-							<Link
+							</NavLink>
+							<NavLink
 								to='/dashboard/settings/profile'
-								className='flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
+								className={({ isActive }) =>
+									isActive
+										? 'flex items-center gap-3 rounded-lg px-3 py-2 transition-all text-foreground bg-muted'
+										: 'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
+								}
 							>
 								<Settings2 className='h-4 w-4' />
 								Settings
-							</Link>
+							</NavLink>
 						</nav>
 					</div>
 				</div>
@@ -102,26 +111,34 @@ function BuilderLayout() {
 						<SheetContent side='left' className='flex flex-col'>
 							<nav className='grid gap-2 text-lg font-medium'>
 								<Link
-									to='#'
+									to='/'
 									className='flex items-center gap-2 text-lg font-semibold'
 								>
 									<img src={Logo} alt='logo' className='h-6 w-6' />
-									<span className='sr-only'>Resumaker</span>
+									<span>Resumaker</span>
 								</Link>
-								<Link
+								<NavLink
 									to='/dashboard/resumes'
-									className='mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground'
+									className={({ isActive }) =>
+										isActive
+											? 'mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-foreground bg-muted'
+											: 'mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground'
+									}
 								>
 									<FileText className='h-5 w-5' />
 									Resumes
-								</Link>
-								<Link
-									to='/dashboard/settings'
-									className='mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground'
+								</NavLink>
+								<NavLink
+									to='/dashboard/settings/profile'
+									className={({ isActive }) =>
+										isActive
+											? 'mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-foreground bg-muted'
+											: 'mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground'
+									}
 								>
 									<Settings2 className='h-5 w-5' />
 									Settings
-								</Link>
+								</NavLink>
 							</nav>
 						</SheetContent>
 					</Sheet>

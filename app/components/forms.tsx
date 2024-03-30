@@ -4,7 +4,6 @@ import { Checkbox, type CheckboxProps } from '~/components/ui/checkbox';
 import { Input } from '~/components/ui/input';
 import { Label } from '~/components/ui/label';
 import { Textarea } from '~/components/ui/textarea';
-import { cn } from '~/lib/utils';
 
 export type ListOfErrors = Array<string | null | undefined> | null | undefined;
 
@@ -43,7 +42,7 @@ export function Field({
 	const id = inputProps.id ?? fallbackId;
 	const errorId = errors?.length ? `${id}-error` : undefined;
 	return (
-		<div className={cn('grid gap-2', className)}>
+		<>
 			<Label htmlFor={id} {...labelProps} />
 			<Input
 				id={id}
@@ -51,10 +50,12 @@ export function Field({
 				aria-describedby={errorId}
 				{...inputProps}
 			/>
-			<div className='min-h-[32px] px-4 pb-3 pt-1'>
-				{errorId ? <ErrorList id={errorId} errors={errors} /> : null}
-			</div>
-		</div>
+			{errorId && (
+				<div className='min-h-[32px] px-4 pb-3 pt-1'>
+					{errorId ? <ErrorList id={errorId} errors={errors} /> : null}
+				</div>
+			)}
+		</>
 	);
 }
 

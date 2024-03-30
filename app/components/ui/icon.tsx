@@ -1,29 +1,29 @@
-import { type SVGProps } from "react";
-import { cn } from "~/utils/misc";
-import href from "./icons/sprite.svg";
-import { type IconName } from "./icons/name";
+import { type SVGProps } from 'react';
+import { cn } from '~/utils/misc';
+import href from './icons/sprite.svg';
+import { type IconName } from './icons/name';
 
 export { href };
 export { IconName };
 
 const sizeClassName = {
-	font: "w-[1em] h-[1em]",
-	xs: "w-3 h-3",
-	sm: "w-4 h-4",
-	md: "w-5 h-5",
-	lg: "w-6 h-6",
-	xl: "w-7 h-7",
+	font: 'w-[1em] h-[1em]',
+	xs: 'w-3 h-3',
+	sm: 'w-4 h-4',
+	md: 'w-5 h-5',
+	lg: 'w-6 h-6',
+	xl: 'w-7 h-7',
 } as const;
 
 type Size = keyof typeof sizeClassName;
 
 const childrenSizeClassName = {
-	font: "gap-1.5",
-	xs: "gap-1.5",
-	sm: "gap-1.5",
-	md: "gap-2",
-	lg: "gap-2",
-	xl: "gap-3",
+	font: 'gap-1.5',
+	xs: 'gap-1.5',
+	sm: 'gap-1.5',
+	md: 'gap-2',
+	lg: 'gap-2',
+	xl: 'gap-3',
 } satisfies Record<Size, string>;
 
 /**
@@ -36,7 +36,7 @@ const childrenSizeClassName = {
  */
 export function Icon({
 	name,
-	size = "font",
+	size = 'font',
 	className,
 	children,
 	...props
@@ -47,7 +47,7 @@ export function Icon({
 	if (children) {
 		return (
 			<span
-				className={`inline-flex items-center ${childrenSizeClassName[size]}`}
+				className={`inline-flex items-center gap-2 text-sm ${childrenSizeClassName[size]}`}
 			>
 				<Icon name={name} size={size} className={className} {...props} />
 				{children}
@@ -57,7 +57,7 @@ export function Icon({
 	return (
 		<svg
 			{...props}
-			className={cn(sizeClassName[size], "inline self-center", className)}
+			className={cn(sizeClassName[size], 'inline self-center', className)}
 		>
 			<use href={`${href}#${name}`} />
 		</svg>
