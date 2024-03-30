@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useAppDispatch, useAppSelector } from '~/lib/redux/hooks';
 import {
 	changeWorkExperiences,
@@ -8,7 +9,7 @@ import { CreateHandleChangeArgsWithDescriptions } from './types';
 import { ResumeWorkExperience } from '~/lib/redux/types';
 import { Input } from '~/components/ui/input';
 import { Label } from '~/components/ui/label';
-import { Textarea } from '~/components/ui/textarea';
+import { BulletListTextarea } from './form/input-group';
 
 export const WorkexperiencesForm = () => {
 	const workExperiences = useAppSelector(selectWorkExperiences);
@@ -82,16 +83,13 @@ export const WorkexperiencesForm = () => {
 							</div>
 						</div>
 						<div className='grid gap-3'>
-							<Label htmlFor='summary'>Description</Label>
-							<Textarea
-								id='descriptions'
+							<BulletListTextarea
+								label='Description'
+								labelClassName='col-span-full'
 								name='descriptions'
 								placeholder='Bullet points'
-								className='min-h-[9.5rem]'
 								value={descriptions}
-								onChange={(e) =>
-									handleWorkExperienceChange('descriptions', [e.target.value])
-								}
+								onChange={handleWorkExperienceChange}
 							/>
 						</div>
 					</FormSection>

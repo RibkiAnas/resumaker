@@ -4,7 +4,7 @@ import { selectThemeColor } from '~/lib/redux/settingsSlice';
 import { Form } from './form';
 import { Label } from '~/components/ui/label';
 import { FeaturedSkillInput } from './form/featured-skill-input';
-import { Textarea } from '~/components/ui/textarea';
+import { BulletListTextarea } from './form/input-group';
 
 export const SkillsForm = () => {
 	const skills = useAppSelector(selectSkills);
@@ -25,45 +25,42 @@ export const SkillsForm = () => {
 	};
 	return (
 		<Form form={form}>
-				<div className='grid gap-3'>
-					<Label htmlFor='summary'>Skills List</Label>
-					<Textarea
-						id='descriptions'
-						name='descriptions'
-						placeholder='Description'
-						className='min-h-[9.5rem]'
-						value={descriptions}
-						onChange={(e) =>
-							handleSkillsChange('descriptions', [e.target.value])
-						}
-					/>
-				</div>
-				<div className='col-span-full mb-4 mt-6 border-t-2 border-dotted border-gray-200' />
-				<Label
-				// className="col-span-full"
-				>
-					Featured Skills (Optional)
-				</Label>
-				<p className='mt-2 text-sm font-normal text-gray-600'>
-					Featured skills is optional to highlight top skills, with more circles
-					mean higher proficiency.
-				</p>
+			<div className='grid gap-3'>
+				<BulletListTextarea
+					label='Skills List'
+					labelClassName='col-span-full'
+					name='descriptions'
+					placeholder='Bullet points'
+					value={descriptions}
+					onChange={handleSkillsChange}
+				/>
+			</div>
+			<div className='col-span-full mb-4 mt-6 border-t-2 border-dotted border-gray-200' />
+			<Label
+			// className="col-span-full"
+			>
+				Featured Skills (Optional)
+			</Label>
+			<p className='mt-2 text-sm font-normal text-gray-600'>
+				Featured skills is optional to highlight top skills, with more circles
+				mean higher proficiency.
+			</p>
 
-				<div className='grid grid-cols-2 gap-4 mt-2'>
-					{featuredSkills.map(({ skill, rating }, idx) => (
-						<FeaturedSkillInput
-							key={idx}
-							className='gap-3'
-							skill={skill}
-							rating={rating}
-							setSkillRating={(newSkill, newRating) => {
-								handleFeaturedSkillsChange(idx, newSkill, newRating);
-							}}
-							placeholder={`Featured Skill ${idx + 1}`}
-							circleColor={themeColor}
-						/>
-					))}
-				</div>
+			<div className='grid grid-cols-2 gap-4 mt-2'>
+				{featuredSkills.map(({ skill, rating }, idx) => (
+					<FeaturedSkillInput
+						key={idx}
+						className='gap-3'
+						skill={skill}
+						rating={rating}
+						setSkillRating={(newSkill, newRating) => {
+							handleFeaturedSkillsChange(idx, newSkill, newRating);
+						}}
+						placeholder={`Featured Skill ${idx + 1}`}
+						circleColor={themeColor}
+					/>
+				))}
+			</div>
 		</Form>
 	);
 };

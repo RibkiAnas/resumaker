@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useAppDispatch, useAppSelector } from '~/lib/redux/hooks';
 import { changeEducations, selectEducations } from '~/lib/redux/resumeSlice';
 import { Form, FormSection } from './form';
@@ -5,7 +6,7 @@ import { Label } from '~/components/ui/label';
 import { Input } from '~/components/ui/input';
 import { CreateHandleChangeArgsWithDescriptions } from './types';
 import { ResumeEducation } from '~/lib/redux/types';
-import { Textarea } from '~/components/ui/textarea';
+import { BulletListTextarea } from './form/input-group';
 
 export const EducationsForm = () => {
 	const educations = useAppSelector(selectEducations);
@@ -89,16 +90,13 @@ export const EducationsForm = () => {
 							</div>
 						</div>
 						<div className='grid gap-3'>
-							<Label htmlFor='summary'>Additional Information (Optional)</Label>
-							<Textarea
-								id='descriptions'
+							<BulletListTextarea
+								label='Additional Information (Optional)'
+								labelClassName='col-span-full'
 								name='descriptions'
 								placeholder='Free paragraph space to list out additional activities, courses, awards etc'
-								className='min-h-[9.5rem]'
 								value={descriptions}
-								onChange={(e) =>
-									handleEducationChange('descriptions', [e.target.value])
-								}
+								onChange={handleEducationChange}
 							/>
 						</div>
 					</FormSection>

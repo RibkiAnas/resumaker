@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useAppDispatch, useAppSelector } from '~/lib/redux/hooks';
 import { changeProjects, selectProjects } from '~/lib/redux/resumeSlice';
 import { Form, FormSection } from './form';
@@ -5,7 +6,7 @@ import { CreateHandleChangeArgsWithDescriptions } from './types';
 import { ResumeProject } from '~/lib/redux/types';
 import { Label } from '~/components/ui/label';
 import { Input } from '~/components/ui/input';
-import { Textarea } from '~/components/ui/textarea';
+import { BulletListTextarea } from './form/input-group';
 
 export const ProjectsForm = () => {
 	const projects = useAppSelector(selectProjects);
@@ -61,16 +62,13 @@ export const ProjectsForm = () => {
 							</div>
 						</div>
 						<div className='grid gap-3'>
-							<Label htmlFor='summary'>Description</Label>
-							<Textarea
-								id='descriptions'
+							<BulletListTextarea
 								name='descriptions'
-								placeholder='Description'
-								className='min-h-[9.5rem]'
+								label='Description'
+								placeholder='Bullet points'
 								value={descriptions}
-								onChange={(e) =>
-									handleProjectChange('descriptions', [e.target.value])
-								}
+								onChange={handleProjectChange}
+								labelClassName='col-span-full'
 							/>
 						</div>
 					</FormSection>
