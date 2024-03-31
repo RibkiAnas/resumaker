@@ -4,7 +4,7 @@ import {
 	LoaderFunctionArgs,
 	redirect,
 } from '@remix-run/cloudflare';
-import { Plus } from 'lucide-react';
+import { FolderOpen, PenLine, Plus, TrashIcon } from 'lucide-react';
 import { Card } from '~/components/ui/card';
 import { ScrollArea } from '~/components/ui/scroll-area';
 import { cn } from '~/lib/utils';
@@ -12,9 +12,9 @@ import {
 	Dialog,
 	DialogContent,
 	DialogDescription,
+	DialogFooter,
 	DialogHeader,
 	DialogTitle,
-	DialogTrigger,
 } from '~/components/ui/dialog';
 import { Input } from '~/components/ui/input';
 import { Label } from '~/components/ui/label';
@@ -38,6 +38,25 @@ import { StatusButton } from '~/components/ui/status-button';
 import { eq } from 'drizzle-orm';
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react';
 import { formatDistanceToNow } from 'date-fns';
+import {
+	ContextMenu,
+	ContextMenuContent,
+	ContextMenuItem,
+	ContextMenuSeparator,
+	ContextMenuShortcut,
+	ContextMenuTrigger,
+} from '~/components/ui/context-menu';
+import { useState } from 'react';
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+} from '~/components/ui/alert-dialog';
 
 export const loader = async ({ request, context }: LoaderFunctionArgs) => {
 	const userId = await getUserId(request, context);
@@ -75,7 +94,9 @@ const titleMaxLength = 100;
 // const contentMaxLength = 10000
 
 const resumeSchema = z.object({
-	title: z.string().max(titleMaxLength),
+	_action: z.string().optional(),
+	resumeId: z.string().optional(),
+	title: z.string().max(titleMaxLength).optional(),
 	// content: z.string(),
 });
 
@@ -96,23 +117,65 @@ export async function action({ request, context }: ActionFunctionArgs) {
 	if (!submission.value) {
 		return json({ status: 'error', submission } as const, { status: 400 });
 	}
-	const { title } = submission.value;
+	const { _action, resumeId, title } = submission.value;
 
 	const userId = await getUserId(request, context);
 
 	const db = buildDbClient(context);
 
-	await db.insert(resumes).values({
-		id: cuid(),
-		ownerId: userId as string,
-		title: title,
-		content: '',
-	});
+	if (_action === 'updateOrCreate') {
+		await db.transaction(async (tx) => {
+			// let resume;
+
+			const user = await tx.query.users.findFirst({
+				columns: {
+					id: true,
+				},
+				where: eq(users.id, userId as string),
+			});
+
+			if (!resumeId) {
+				await tx.insert(resumes).values({
+					id: cuid(),
+					ownerId: user?.id as string,
+					title: title,
+					content: '',
+				});
+			}
+
+			if (resumeId) {
+				await tx
+					.update(resumes)
+					.set({ title: title, updatedAt: new Date() })
+					.where(eq(resumes.id, resumeId))
+					.all();
+			}
+		});
+	}
+
+	if (_action === 'delete') {
+		await db
+			.delete(resumes)
+			.where(eq(resumes.id, resumeId as string))
+			.all();
+	}
+	// await db.insert(resumes).values({
+	// 	id: cuid(),
+	// 	ownerId: userId as string,
+	// 	title: title,
+	// 	content: '',
+	// });
 
 	return redirect(`/dashboard/resumes`);
 }
 
 function Index() {
+	const [isOpen, setIsOpen] = useState(false);
+	const [isAlertOpen, setIsAlertOpen] = useState(false);
+	const [isCreate, setIsCreate] = useState(false);
+	const [isUpdate, setIsUpdate] = useState(false);
+	const [resumeId, setResumeId] = useState('');
+
 	const data = useLoaderData<typeof loader>();
 	const actionData = useActionData<typeof action>();
 	const isSubmitting = useIsSubmitting();
@@ -134,45 +197,36 @@ function Index() {
 	return (
 		<ScrollArea className='h-[calc(100vh-140px)] lg:h-[calc(100vh-88px)]'>
 			<div className='grid grid-cols-1 gap-8 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'>
-				<Dialog>
-					<DialogTrigger asChild>
-						<Card
-							className={cn(
-								'relative flex aspect-[1/1.4142] scale-100 cursor-pointer items-center justify-center bg-secondary/50 p-0 transition-transform active:scale-95'
-							)}
-						>
-							<Plus size={64} className='h-4 w-4' />
-							<div
-								className={cn(
-									'absolute inset-x-0 bottom-0 z-10 flex flex-col justify-end space-y-0.5 p-4 pt-12',
-									'bg-gradient-to-t from-background/80 to-transparent'
-								)}
-							>
-								<h4 className='font-medium text-md'>Create a new resume</h4>
-
-								<p className='text-xs opacity-75'>
-									Start building from scratch
-								</p>
-							</div>
-						</Card>
-					</DialogTrigger>
+				<Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
 					<DialogContent className='sm:max-w-[425px]'>
-						<DialogHeader>
-							<DialogTitle>Create a new resume</DialogTitle>
-							<DialogDescription>
-								Start building your resume by giving it a name.
-							</DialogDescription>
-						</DialogHeader>
 						<Form method='post' {...form.props}>
+							<DialogHeader>
+								<DialogTitle>
+									{isCreate && 'Create a new resume'}
+									{isUpdate && 'Update an existing resume'}
+								</DialogTitle>
+								<DialogDescription>
+									{isCreate &&
+										'Start building your resume by giving it a name.'}
+									{isUpdate &&
+										'Changed your mind about the name? Give it a new one.'}
+								</DialogDescription>
+							</DialogHeader>
 							<AuthenticityTokenInput />
 							<div style={{ display: 'none' }} aria-hidden>
 								<label htmlFor='name-input'>
 									Please leave this field blank
 								</label>
 								<input id='name-input' name='name' type='text' tabIndex={-1} />
+								<input
+									name='resumeId'
+									type='text'
+									value={resumeId}
+									tabIndex={-1}
+								/>
 							</div>
-							<div className='grid gap-4 py-4'>
-								<div className='grid grid-cols-4 items-center gap-4'>
+							<div className='grid py-4'>
+								<div className='items-center gap-4 space-y-2'>
 									<Label htmlFor={fields.title.id} className='text-right'>
 										Name
 									</Label>
@@ -181,29 +235,100 @@ function Index() {
 										{...conform.input(fields.title)}
 										className='col-span-3'
 									/>
-									<div className='min-h-[32px] px-4 pb-3 pt-1'>
-										<ErrorList
-											id={fields.title.errorId}
-											errors={fields.title.errors}
-										/>
-									</div>
+									<p className='text-xs leading-relaxed opacity-60'>
+										Tip: You can name the resume referring to the position you
+										are applying for.
+									</p>
+									{fields.title.errors && fields.title.errors.length > 0 && (
+										<div className='min-h-[32px] px-4 pb-3 pt-1'>
+											<ErrorList
+												id={fields.title.errorId}
+												errors={fields.title.errors}
+											/>
+										</div>
+									)}
 								</div>
 							</div>
 							<ErrorList id={form.errorId} errors={form.errors} />
-							{/* <DialogFooter> */}
-							{/* <Button type='submit'>Create</Button> */}
-							<StatusButton
-								form={form.id}
-								type='submit'
-								disabled={isSubmitting}
-								status={isSubmitting ? 'pending' : 'idle'}
-							>
-								Submit
-							</StatusButton>
-							{/* </DialogFooter> */}
+							<DialogFooter>
+								<StatusButton
+									form={form.id}
+									type='submit'
+									name='_action'
+									value='updateOrCreate'
+									disabled={isSubmitting}
+									status={isSubmitting ? 'pending' : 'idle'}
+								>
+									{isCreate && `Create`}
+									{isUpdate && `Save Changes`}
+								</StatusButton>
+							</DialogFooter>
 						</Form>
 					</DialogContent>
 				</Dialog>
+
+				<AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
+					<AlertDialogContent>
+						<AlertDialogHeader>
+							<AlertDialogTitle>
+								Are you sure you want to delete your resume?
+							</AlertDialogTitle>
+							<AlertDialogDescription>
+								This action cannot be undone. This will permanently delete your
+								resume and cannot be recovered.
+							</AlertDialogDescription>
+						</AlertDialogHeader>
+						<AlertDialogFooter>
+							<AlertDialogCancel>Cancel</AlertDialogCancel>
+							<Form method='post'>
+								<AuthenticityTokenInput />
+								<div style={{ display: 'none' }} aria-hidden>
+									<label htmlFor='name-input'>
+										Please leave this field blank
+									</label>
+									<input
+										id='name-input'
+										name='name'
+										type='text'
+										tabIndex={-1}
+									/>
+									<input
+										name='resumeId'
+										type='text'
+										value={resumeId}
+										tabIndex={-1}
+									/>
+								</div>
+								<AlertDialogAction name='_action' value='delete' type='submit'>
+									Continue
+								</AlertDialogAction>
+							</Form>
+						</AlertDialogFooter>
+					</AlertDialogContent>
+				</AlertDialog>
+
+				<Card
+					className={cn(
+						'relative flex aspect-[1/1.4142] scale-100 cursor-pointer items-center justify-center bg-secondary/50 p-0 transition-transform active:scale-95'
+					)}
+					onClick={() => {
+						setIsOpen(true);
+						setIsCreate(true);
+						setIsUpdate(false);
+					}}
+				>
+					<Plus size={64} className='h-4 w-4' />
+					<div
+						className={cn(
+							'absolute inset-x-0 bottom-0 z-10 flex flex-col justify-end space-y-0.5 p-4 pt-12',
+							'bg-gradient-to-t from-background/80 to-transparent'
+						)}
+					>
+						<h4 className='font-medium text-md'>Create a new resume</h4>
+
+						<p className='text-xs opacity-75'>Start building from scratch</p>
+					</div>
+				</Card>
 
 				{data.owner.resumes && (
 					<>
@@ -212,27 +337,72 @@ function Index() {
 							.map((resume) => (
 								<div key={resume.id}>
 									{/* <ResumeCard resume={resume} /> */}
-									<Card
-										className={cn(
-											'relative flex aspect-[1/1.4142] scale-100 cursor-pointer items-center justify-center bg-secondary/50 p-0 transition-transform active:scale-95'
-										)}
-										onClick={() => navigate(`/dashboard/builder/${resume.id}`)}
-									>
-										{/* <Plus size={64} className='h-4 w-4' /> */}
-										<div
-											className={cn(
-												'absolute inset-x-0 bottom-0 z-10 flex flex-col justify-end space-y-0.5 p-4 pt-12',
-												'bg-gradient-to-t from-background/80 to-transparent'
-											)}
-										>
-											<h4 className='font-medium text-md'>{resume.title}</h4>
+									<ContextMenu>
+										<ContextMenuTrigger>
+											<Card
+												className={cn(
+													'relative flex aspect-[1/1.4142] scale-100 cursor-pointer items-center justify-center bg-secondary/50 p-0 transition-transform active:scale-95'
+												)}
+												onClick={() =>
+													navigate(`/dashboard/builder/${resume.id}`)
+												}
+											>
+												<div
+													className={cn(
+														'absolute inset-x-0 bottom-0 z-10 flex flex-col justify-end space-y-0.5 p-4 pt-12',
+														'bg-gradient-to-t from-background/80 to-transparent'
+													)}
+												>
+													<h4 className='font-medium text-md'>
+														{resume.title}
+													</h4>
 
-											<p className='text-xs opacity-75'>
-												Last updated{' '}
-												{formatDistanceToNow(String(resume.updatedAt))}
-											</p>
-										</div>
-									</Card>
+													<p className='text-xs opacity-75'>
+														Last updated{' '}
+														{formatDistanceToNow(String(resume.updatedAt))}
+													</p>
+												</div>
+											</Card>
+										</ContextMenuTrigger>
+										<ContextMenuContent className='w-full'>
+											<ContextMenuItem
+												onClick={() =>
+													navigate(`/dashboard/builder/${resume.id}`)
+												}
+											>
+												<ContextMenuShortcut>
+													<FolderOpen className='h-3 w-3' />
+												</ContextMenuShortcut>
+												Open
+											</ContextMenuItem>
+											<ContextMenuItem
+												onClick={() => {
+													setIsOpen(true);
+													setIsUpdate(true);
+													setIsCreate(false);
+													setResumeId(resume.id);
+												}}
+											>
+												<ContextMenuShortcut>
+													<PenLine className='h-3 w-3' />
+												</ContextMenuShortcut>
+												Rename
+											</ContextMenuItem>
+											<ContextMenuSeparator />
+											<ContextMenuItem
+												onClick={() => {
+													setIsAlertOpen(true);
+													setResumeId(resume.id);
+												}}
+												className='text-destructive focus:text-destructive'
+											>
+												<ContextMenuShortcut className='text-destructive'>
+													<TrashIcon className='h-3 w-3' />
+												</ContextMenuShortcut>
+												Remove
+											</ContextMenuItem>
+										</ContextMenuContent>
+									</ContextMenu>
 								</div>
 							))}
 					</>
