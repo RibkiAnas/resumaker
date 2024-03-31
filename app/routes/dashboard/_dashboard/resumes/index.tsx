@@ -30,6 +30,7 @@ import {
 	useActionData,
 	useLoaderData,
 	useNavigate,
+	useNavigation,
 } from '@remix-run/react';
 import { invariantResponse, useIsSubmitting } from '~/utils/misc';
 import { conform, useForm } from '@conform-to/react';
@@ -57,6 +58,7 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 } from '~/components/ui/alert-dialog';
+import { deleteStateFromLocalStorage } from '~/lib/redux/local-storage';
 
 export const loader = async ({ request, context }: LoaderFunctionArgs) => {
 	const userId = await getUserId(request, context);
@@ -159,12 +161,6 @@ export async function action({ request, context }: ActionFunctionArgs) {
 			.where(eq(resumes.id, resumeId as string))
 			.all();
 	}
-	// await db.insert(resumes).values({
-	// 	id: cuid(),
-	// 	ownerId: userId as string,
-	// 	title: title,
-	// 	content: '',
-	// });
 
 	return redirect(`/dashboard/resumes`);
 }
@@ -180,6 +176,7 @@ function Index() {
 	const actionData = useActionData<typeof action>();
 	const isSubmitting = useIsSubmitting();
 	const navigate = useNavigate();
+	const { state } = useNavigation();
 
 	const [form, fields] = useForm({
 		id: 'resume-editor',
@@ -218,12 +215,14 @@ function Index() {
 									Please leave this field blank
 								</label>
 								<input id='name-input' name='name' type='text' tabIndex={-1} />
-								<input
-									name='resumeId'
-									type='text'
-									value={resumeId}
-									tabIndex={-1}
-								/>
+								{isUpdate && (
+									<input
+										name='resumeId'
+										type='text'
+										value={resumeId}
+										tabIndex={-1}
+									/>
+								)}
 							</div>
 							<div className='grid py-4'>
 								<div className='items-center gap-4 space-y-2'>
@@ -258,6 +257,9 @@ function Index() {
 									value='updateOrCreate'
 									disabled={isSubmitting}
 									status={isSubmitting ? 'pending' : 'idle'}
+									onClick={() => {
+										state === 'idle' && setIsOpen(false);
+									}}
 								>
 									{isCreate && `Create`}
 									{isUpdate && `Save Changes`}
@@ -299,7 +301,12 @@ function Index() {
 										tabIndex={-1}
 									/>
 								</div>
-								<AlertDialogAction name='_action' value='delete' type='submit'>
+								<AlertDialogAction
+									name='_action'
+									value='delete'
+									type='submit'
+									onClick={() => deleteStateFromLocalStorage(resumeId)}
+								>
 									Continue
 								</AlertDialogAction>
 							</Form>
