@@ -20,9 +20,9 @@ const formTypeToComponent: { [type in ShowForm]: () => JSX.Element } = {
 	custom: CustomForm,
 };
 
-function ResumeForms() {
-	useSetInitialStore();
-	useSaveStateToLocalStorageOnChange();
+function ResumeForms({ resumeId }: { resumeId: string }) {
+	useSetInitialStore(resumeId);
+	useSaveStateToLocalStorageOnChange(resumeId);
 
 	const formsOrder = useAppSelector(selectFormsOrder);
 

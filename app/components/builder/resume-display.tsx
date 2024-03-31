@@ -4,8 +4,10 @@ import {
 	DownloadIcon,
 	FocusIcon,
 	HomeIcon,
+	LoaderCircle,
 	PencilIcon,
 	RefreshCcwIcon,
+	SaveIcon,
 	Settings,
 	ZoomInIcon,
 	ZoomOutIcon,
@@ -13,7 +15,7 @@ import {
 import { Separator } from '../ui/separator';
 import { useRef } from 'react';
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
-import { Link } from '@remix-run/react';
+import { Form, Link } from '@remix-run/react';
 import { useReactToPrint } from 'react-to-print';
 import {
 	Drawer,
@@ -50,6 +52,8 @@ import { ResumePDFEducation } from './resume/resume-pdf-education';
 import { ResumPDFProject } from './resume/resum-pdf-project';
 import { ResumePDFSkills } from './resume/resume-pdf-skills';
 import { ResumePDFCustom } from './resume/resume-pdf-custom';
+import { AuthenticityTokenInput } from 'remix-utils/csrf/react';
+import { useIsSubmitting } from '~/utils/misc';
 
 const formTypeToComponent: { [type in ShowForm]: () => JSX.Element } = {
 	workExperiences: WorkexperiencesForm,
@@ -70,12 +74,16 @@ function ResumeDisplay({
 }) {
 	const templateRef = useRef(null);
 	const resumee = useAppSelector(selectResume);
+	const settings = useAppSelector(selectSettings);
+	const isSubmitting = useIsSubmitting();
+
 	const { profile, workExperiences, educations, projects, skills, custom } =
 		resumee;
-	const settings = useAppSelector(selectSettings);
+
 	const isA4 = settings.documentSize === 'A4';
 	const width = isA4 ? A4_WIDTH_PX : LETTER_WIDTH_PX;
 	const height = isA4 ? A4_HEIGHT_PX : LETTER_HEIGHT_PX;
+
 	const themeColor = settings.themeColor || DEFAULT_FONT_COLOR;
 
 	const handlePrint = useReactToPrint({
@@ -315,6 +323,51 @@ function ResumeDisplay({
 										</Button>
 									</TooltipTrigger>
 									<TooltipContent>Download PDF</TooltipContent>
+								</Tooltip>
+								<Separator orientation='vertical' className='mx-2 h-6' />
+								<Tooltip>
+									<TooltipTrigger asChild>
+										<Form method='post'>
+											<AuthenticityTokenInput />
+											<div style={{ display: 'none' }} aria-hidden>
+												<label htmlFor='name-input'>
+													Please leave this field blank
+												</label>
+												<input
+													id='name-input'
+													name='name'
+													type='text'
+													tabIndex={-1}
+												/>
+												<input
+													name='resumeId'
+													value={resume.id}
+													type='text'
+													tabIndex={-1}
+												/>
+												<input
+													name='resumeData'
+													value={JSON.stringify(resumee)}
+													type='text'
+													tabIndex={-1}
+												/>
+											</div>
+											<Button
+												type='submit'
+												variant='ghost'
+												size='icon'
+												disabled={isSubmitting}
+											>
+												{isSubmitting ? (
+													<LoaderCircle className='h-4 w-4 animate-spin' />
+												) : (
+													<SaveIcon className='h-4 w-4' />
+												)}
+												<span className='sr-only'>Save PDF</span>
+											</Button>
+										</Form>
+									</TooltipTrigger>
+									<TooltipContent>Save PDF</TooltipContent>
 								</Tooltip>
 							</div>
 						</div>

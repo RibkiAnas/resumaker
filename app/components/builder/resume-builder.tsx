@@ -45,7 +45,7 @@ function ResumeBuilder({
 						</div>
 						<Separator />
 						<TabsContent value='editor'>
-							<ResumeForms />
+							<ResumeForms resumeId={resume.id} />
 						</TabsContent>
 						<TabsContent value='customizer'>
 							<ThemeForm />

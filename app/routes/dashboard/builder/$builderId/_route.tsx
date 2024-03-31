@@ -1,12 +1,18 @@
-import { json, LoaderFunctionArgs } from '@remix-run/cloudflare';
+import {
+	ActionFunctionArgs,
+	json,
+	LoaderFunctionArgs,
+	redirect,
+} from '@remix-run/cloudflare';
 import { useLoaderData } from '@remix-run/react';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { Provider } from 'react-redux';
 import ResumeBuilder from '~/components/builder/resume-builder';
 import { resumes, users } from '~/drizzle/schema.server';
 import { store } from '~/lib/redux/store';
-import { requireUser } from '~/utils/auth.server';
+import { getUserId, requireUser } from '~/utils/auth.server';
 import { buildDbClient } from '~/utils/client';
+import { validateCSRF } from '~/utils/csrf.server';
 import { invariantResponse } from '~/utils/misc';
 
 export const loader = async ({
@@ -55,6 +61,31 @@ export const loader = async ({
 		resume,
 	});
 };
+
+export async function action({ request, context }: ActionFunctionArgs) {
+	const formData = await request.formData();
+
+	await validateCSRF(formData, request.headers);
+	invariantResponse(!formData.get('name'), 'Form not submitted properly');
+
+	const userId = await getUserId(request, context);
+
+	const db = buildDbClient(context);
+
+	await db
+		.update(resumes)
+		.set({
+			content: formData.get('resumeData'),
+		})
+		.where(
+			and(
+				eq(resumes.ownerId, userId as string),
+				eq(resumes.id, formData.get('resumeId') as string)
+			)
+		);
+
+	return redirect(`/dashboard/builder/${formData.get('resumeId')}`);
+}
 
 function BuilderPage() {
 	const data = useLoaderData();
