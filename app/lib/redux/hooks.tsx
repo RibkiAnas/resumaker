@@ -26,7 +26,7 @@ export const useSaveStateToLocalStorageOnChange = (id: string) => {
 			saveStateToLocalStorage(id, store.getState());
 		});
 		return unsubscribe;
-	}, [id]);
+	}, []);
 };
 
 export const useSetInitialStore = (id: string) => {
@@ -51,5 +51,5 @@ export const useSetInitialStore = (id: string) => {
 			) as Settings;
 			dispatch(setSettings(mergedSettingsState));
 		}
-	}, [dispatch, id]);
+	}, []);
 };

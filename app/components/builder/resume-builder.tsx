@@ -48,7 +48,7 @@ function ResumeBuilder({
 							<ResumeForms resumeId={resume.id} />
 						</TabsContent>
 						<TabsContent value='customizer'>
-							<ThemeForm />
+							<ThemeForm resumeId={resume.id} />
 						</TabsContent>
 					</Tabs>
 				</ResizablePanel>

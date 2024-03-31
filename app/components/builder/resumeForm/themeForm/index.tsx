@@ -1,6 +1,11 @@
 import { Settings } from 'lucide-react';
 import { Label } from '~/components/ui/label';
-import { useAppDispatch, useAppSelector } from '~/lib/redux/hooks';
+import {
+	useAppDispatch,
+	useAppSelector,
+	useSaveStateToLocalStorageOnChange,
+	useSetInitialStore,
+} from '~/lib/redux/hooks';
 import {
 	changeSettings,
 	DEFAULT_THEME_COLOR,
@@ -16,11 +21,14 @@ import {
 import { FontFamily } from '../../fonts/constants';
 import { ScrollArea } from '~/components/ui/scroll-area';
 
-export const ThemeForm = () => {
+export const ThemeForm = ({ resumeId }: { resumeId: string }) => {
 	const settings = useAppSelector(selectSettings);
 	const { fontSize, fontFamily, documentSize } = settings;
 	const themeColor = settings.themeColor || DEFAULT_THEME_COLOR;
 	const dispatch = useAppDispatch();
+
+	useSetInitialStore(resumeId);
+	useSaveStateToLocalStorageOnChange(resumeId);
 
 	const handleSettingsChange = (field: GeneralSetting, value: string) => {
 		dispatch(changeSettings({ field, value }));

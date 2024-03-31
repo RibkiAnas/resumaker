@@ -13,6 +13,16 @@ export const loadStateFromLocalStorage = (id: string) => {
 	}
 };
 
+export const deleteStateFromLocalStorage = (id: string) => {
+	try {
+		const LOCAL_STORAGE_KEY = id;
+
+		localStorage.removeItem(LOCAL_STORAGE_KEY);
+	} catch (e) {
+		return undefined;
+	}
+};
+
 export const saveStateToLocalStorage = (id: string, state: RootState) => {
 	try {
 		const LOCAL_STORAGE_KEY = id;

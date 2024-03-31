@@ -347,7 +347,9 @@ function ResumeDisplay({
 												/>
 												<input
 													name='resumeData'
-													value={JSON.stringify(resumee)}
+													value={
+														JSON.stringify(resumee) + JSON.stringify(settings)
+													}
 													type='text'
 													tabIndex={-1}
 												/>
