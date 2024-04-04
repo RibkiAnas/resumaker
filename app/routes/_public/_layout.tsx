@@ -8,6 +8,7 @@ import {
 import { Outlet } from '@remix-run/react';
 import { eq } from 'drizzle-orm';
 import { z } from 'zod';
+import { Footer } from '~/components/home/footer';
 import Header from '~/components/home/header';
 import { users } from '~/drizzle/schema.server';
 import { getUserId } from '~/utils/auth.server';
@@ -112,6 +113,7 @@ function Layout() {
 			<main className='bg-page-gradient pt-navigation-height'>
 				<Outlet />
 			</main>
+			<Footer />
 		</div>
 	);
 }
