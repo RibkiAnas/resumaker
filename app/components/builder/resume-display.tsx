@@ -87,7 +87,7 @@ function ResumeDisplay({
 	const themeColor = settings.themeColor || DEFAULT_FONT_COLOR;
 
 	const handlePrint = useReactToPrint({
-		documentTitle: 'Print This Document',
+		documentTitle: `${resume.title} - Resume`,
 		onBeforePrint: () => console.log('before printing...'),
 		onAfterPrint: () => console.log('after printing...'),
 		removeAfterPrint: true,
@@ -187,7 +187,7 @@ function ResumeDisplay({
 							<DrawerDescription>Customize your resume.</DrawerDescription>
 						</DrawerHeader>
 						<div className='grid w-full items-start gap-6 overflow-auto'>
-							<ThemeForm />
+							<ThemeForm resumeId={resume.id} />
 						</div>
 					</DrawerContent>
 				</Drawer>
