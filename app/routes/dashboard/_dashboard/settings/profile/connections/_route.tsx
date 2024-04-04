@@ -236,7 +236,7 @@ function Connection({
 				<TooltipProvider>
 					<Tooltip open={infoOpen} onOpenChange={setInfoOpen}>
 						<TooltipTrigger onClick={() => setInfoOpen(true)}>
-							<Icon name='question-mark-circled'></Icon>
+							<Icon name='question-mark-circled' size='sm'></Icon>
 						</TooltipTrigger>
 						<TooltipContent>
 							You cannot delete your last connection unless you have a password.
