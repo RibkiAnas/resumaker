@@ -1,22 +1,50 @@
-# Welcome to Remix!
 
-- [Remix Docs](https://remix.run/docs)
+# Resumaker
 
-## Development
+A resume builder that simplifies the process of creating,
+updating, and sharing your resume.
 
-You will be utilizing Wrangler for local development to emulate the Cloudflare runtime. This is already wired up in your package.json as the `dev` script:
+## Environment Variables
 
-```sh
-# start the remix dev server and wrangler
-npm run dev
+To run this project, you will need to add the following environment variables to your .dev.vars file
+
+`TURSO_DB_URL`
+
+`TURSO_DB_AUTH_TOKEN`
+
+`RESEND_API_KEY`
+
+`GITHUB_CLIENT_ID`
+
+`GITHUB_CLIENT_SECRET`
+
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone https://github.com/RibkiAnas/resumaker.git
 ```
 
-Open up [http://127.0.0.1:8788](http://127.0.0.1:8788) and you should be ready to go!
+Go to the project directory
 
-## Deployment
+```bash
+  cd qode
+```
 
-Cloudflare Pages are currently only deployable through their Git provider integrations.
+Install dependencies
 
-If you don't already have an account, then [create a Cloudflare account here](https://dash.cloudflare.com/sign-up/pages) and after verifying your email address with Cloudflare, go to your dashboard and follow the [Cloudflare Pages deployment guide](https://developers.cloudflare.com/pages/framework-guides/deploy-anything).
+```bash
+  npm install
+```
 
-Configure the "Build command" should be set to `npm run build`, and the "Build output directory" should be set to `public`.
+Start the server
+
+```bash
+  npm run dev
+```
+
+
+## Author
+
+- [@RibkiAnas](https://github.com/RibkiAnas)
