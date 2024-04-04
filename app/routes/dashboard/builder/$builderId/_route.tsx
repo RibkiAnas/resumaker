@@ -2,7 +2,6 @@ import {
 	ActionFunctionArgs,
 	json,
 	LoaderFunctionArgs,
-	redirect,
 } from '@remix-run/cloudflare';
 import { useLoaderData } from '@remix-run/react';
 import { and, eq } from 'drizzle-orm';
@@ -14,6 +13,7 @@ import { getUserId, requireUser } from '~/utils/auth.server';
 import { buildDbClient } from '~/utils/client';
 import { validateCSRF } from '~/utils/csrf.server';
 import { invariantResponse } from '~/utils/misc';
+import { redirectWithToast } from '~/utils/toast.server';
 
 export const loader = async ({
 	request,
@@ -84,7 +84,14 @@ export async function action({ request, context }: ActionFunctionArgs) {
 			)
 		);
 
-	return redirect(`/dashboard/builder/${formData.get('resumeId')}`);
+	throw await redirectWithToast(
+		`/dashboard/builder/${formData.get('resumeId')}`,
+		{
+			type: 'success',
+			title: 'Resume',
+			description: 'Your resume has been updated successfully.',
+		}
+	);
 }
 
 function BuilderPage() {
