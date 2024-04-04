@@ -2,7 +2,6 @@ import {
 	ActionFunctionArgs,
 	json,
 	LoaderFunctionArgs,
-	redirect,
 } from '@remix-run/cloudflare';
 import { FolderOpen, PenLine, Plus, TrashIcon } from 'lucide-react';
 import { Card } from '~/components/ui/card';
@@ -59,6 +58,7 @@ import {
 	AlertDialogTitle,
 } from '~/components/ui/alert-dialog';
 import { deleteStateFromLocalStorage } from '~/lib/redux/local-storage';
+import { redirectWithToast } from '~/utils/toast.server';
 
 export const loader = async ({ request, context }: LoaderFunctionArgs) => {
 	const userId = await getUserId(request, context);
@@ -162,7 +162,16 @@ export async function action({ request, context }: ActionFunctionArgs) {
 			.all();
 	}
 
-	return redirect(`/dashboard/resumes`);
+	throw await redirectWithToast(`/dashboard/resumes`, {
+		type: 'success',
+		title: 'Resume',
+		description: `
+      Your resume has been 
+      ${!resumeId && _action === 'updateOrCreate' ? 'created' : ''}
+      ${resumeId && _action === 'updateOrCreate' ? 'renamed' : ''}
+      ${resumeId && _action === 'delete' ? 'deleted' : ''} 
+      successfully.`,
+	});
 }
 
 function Index() {
@@ -192,7 +201,7 @@ function Index() {
 	});
 
 	return (
-		<ScrollArea className='h-[calc(100vh-140px)] lg:h-[calc(100vh-88px)]'>
+		<ScrollArea className='h-[calc(100vh-90px)] lg:h-[calc(100vh-88px)]'>
 			<div className='grid grid-cols-1 gap-8 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'>
 				<Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
 					<DialogContent className='sm:max-w-[425px]'>
