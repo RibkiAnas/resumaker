@@ -131,6 +131,14 @@ const config = {
 					transform: 'scale(0.98)',
 				},
 			},
+			'accordion-down': {
+				from: { height: '0' },
+				to: { height: 'var(--radix-accordion-content-height)' },
+			},
+			'accordion-up': {
+				from: { height: 'var(--radix-accordion-content-height)' },
+				to: { height: '0' },
+			},
 		},
 		animation: {
 			'fade-in': 'fade-in 1000ms var(--animation-delay, 0ms) ease forwards',
@@ -143,6 +151,8 @@ const config = {
 				'glow-line-vertical var(--animation-duration) ease-in forwards',
 			zap: 'zap 2250ms calc(var(--index) * 20ms) linear infinite',
 			bounce: '240ms ease 0s 1 running bounce',
+			'accordion-down': 'accordion-down 0.2s ease-out',
+			'accordion-up': 'accordion-up 0.2s ease-out',
 		},
 		extend: {
 			colors: {

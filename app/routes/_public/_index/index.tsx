@@ -5,6 +5,7 @@ import HomepageHero from '~/components/home/sections/homepage-hero';
 import { cn } from '~/lib/utils';
 import { HeroImage } from '~/components/home/hero/hero-image';
 import { FeatureTabs } from '~/components/home/sections/feature-tabs';
+import { Faqs } from '~/components/home/sections/faqs';
 
 export const meta: MetaFunction = () => {
 	return [
@@ -61,6 +62,10 @@ export default function HomePage() {
 						</div>
 					</div>
 				</section>
+
+				<Container className='pt-[10.4rem]'>
+					<Faqs />
+				</Container>
 			</div>
 		</>
 	);
