@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@media (max-width: 767px) {
+	.signal-line {
+		--rotation: 0deg;
+	}
+}
+
 @layer base {
 	:root {
 		--navigation-height: 4.8rem;
@@ -31,7 +37,6 @@
 
 		--border: 214.3 31.8% 91.4%;
 		--input: 214.3 31.8% 91.4%;
-		--ring: 222.2 84% 4.9%;
 
 		--radius: 0.5rem;
 	}
@@ -63,7 +68,6 @@
 
 		--border: 217.2 32.6% 17.5%;
 		--input: 217.2 32.6% 17.5%;
-		--ring: 212.7 26.8% 83.9%;
 	}
 
 	html {
@@ -132,5 +136,48 @@
 			black calc(60%),
 			transparent 100%
 		);
+	}
+
+	.glass-container {
+		position: relative;
+	}
+
+	.glass-container::before {
+		@apply absolute -inset-[10px] -z-10 rounded-xl border border-slate-100/20 bg-slate-200/10 backdrop-blur-md;
+		content: '';
+	}
+
+	.signal-line {
+		--rotation: 90deg;
+		@apply h-[20px] w-[1.5px] bg-gradient-to-t md:h-[1.5px] md:w-[30px] lg:w-[40px] xl:w-[50px];
+		background-color: hsla(0, 0%, 100%, 0.1);
+		background-image: linear-gradient(
+			var(--rotation),
+			rgba(255, 255, 255, 0) 50%,
+			#bfdbfe 50%,
+			rgba(255, 255, 255, 0) 70%
+		);
+		background-size: 400% 400%;
+	}
+
+	.bg-gradient-to-b {
+		background-image: linear-gradient(to bottom, var(--tw-gradient-stops));
+	}
+
+	.bg-gradient-to-br {
+		background-image: linear-gradient(
+			to bottom right,
+			var(--tw-gradient-stops)
+		);
+	}
+
+	.no-visible-scrollbar {
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	.no-visible-scrollbar::-webkit-scrollbar {
+		display: none;
 	}
 }

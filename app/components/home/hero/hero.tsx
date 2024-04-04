@@ -19,7 +19,7 @@ export const HeroTitle = ({ children, className }: HeroElementProps) => {
 
 export const HeroSubtitle = ({ children, className }: HeroElementProps) => {
 	return (
-		<p className={cn('mb-12 text-lg text-primary-text md:text-xl', className)}>
+		<p className={cn('mb-12 text-lg text-primary md:text-xl', className)}>
 			{children}
 		</p>
 	);

@@ -36,12 +36,14 @@ import { users } from './drizzle/schema.server';
 import { useOptionalUser } from './utils/user';
 import { csrf } from './utils/csrf.server';
 import { getUserId } from './utils/auth.server';
+import remixImageStyles from 'remix-image/remix-image.css';
 
 export const links: LinksFunction = () => {
 	return [
 		{ rel: 'icon', href: faviconAssetUrl },
 		{ rel: 'stylesheet', href: fontStylessheetUrl },
 		{ rel: 'stylesheet', href: stylesheetUrl },
+		{ rel: 'stylesheet', href: remixImageStyles },
 		cssBundleHref
 			? { rel: 'stylesheet', href: cssBundleHref }
 			: { rel: '', href: '' },
