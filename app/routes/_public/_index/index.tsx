@@ -6,6 +6,7 @@ import { cn } from '~/lib/utils';
 import { HeroImage } from '~/components/home/hero/hero-image';
 import { FeatureTabs } from '~/components/home/sections/feature-tabs';
 import { Faqs } from '~/components/home/sections/faqs';
+import { CallToAction } from '~/components/home/sections/call-to-action';
 
 export const meta: MetaFunction = () => {
 	return [
@@ -65,6 +66,10 @@ export default function HomePage() {
 
 				<Container className='pt-[10.4rem]'>
 					<Faqs />
+				</Container>
+
+				<Container className='relative text-center font-medium pt-[10.4rem]'>
+					<CallToAction />
 				</Container>
 			</div>
 		</>
