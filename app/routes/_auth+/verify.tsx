@@ -25,23 +25,14 @@ import { validateCSRF } from '~/utils/csrf.server';
 import { getDomainUrl, useIsPending } from '~/utils/misc';
 import { createId } from '@paralleldrive/cuid2';
 import { handleVerification as handleOnboardingVerification } from './onboarding';
-import { handleVerification as handleResetPasswordVerification } from './reset-password';
-import { handleVerification as handleChangeEmailVerification } from '../dashboard/_dashboard/settings/profile/change-email/_route';
-import {
-	handleVerification as handleLoginTwoFactorVerification,
-	shouldRequestTwoFA,
-} from './login';
-import { twoFAVerifyVerificationType } from '../dashboard/_dashboard/settings/profile/two-factor/verify/_route';
 import { GeneralErrorBoundary } from '~/components/error-boundary';
-import { twoFAVerificationType } from '../dashboard/_dashboard/settings/profile/two-factor/_layout';
-import { redirectWithToast } from '~/utils/toast.server';
 
 export const codeQueryParam = 'code';
 export const targetQueryParam = 'target';
 export const typeQueryParam = 'type';
 export const redirectToQueryParam = 'redirectTo';
 
-const types = ['onboarding', 'reset-password', 'change-email', '2fa'] as const;
+const types = ['onboarding'] as const;
 const VerificationTypeSchema = z.enum(types);
 export type VerificationTypes = z.infer<typeof VerificationTypeSchema>;
 
@@ -93,30 +84,6 @@ export function getRedirectToUrl({
 		redirectToUrl.searchParams.set(redirectToQueryParam, redirectTo);
 	}
 	return redirectToUrl;
-}
-
-export async function requireRecentVerification({
-	request,
-	context,
-	userId,
-}: {
-	request: Request;
-	context: AppLoadContext;
-	userId: string;
-}) {
-	if (await shouldRequestTwoFA({ request, context, userId })) {
-		const reqUrl = new URL(request.url);
-		const redirectUrl = getRedirectToUrl({
-			request,
-			target: userId,
-			type: twoFAVerificationType,
-			redirectTo: reqUrl.pathname + reqUrl.search,
-		});
-		throw await redirectWithToast(redirectUrl.toString(), {
-			title: 'Please Reverify',
-			description: 'Please reverify your account before proceeding',
-		});
-	}
 }
 
 export async function prepareVerification({
@@ -188,7 +155,7 @@ export async function isCodeValid({
 }: {
 	context: AppLoadContext;
 	code: string;
-	type: VerificationTypes | typeof twoFAVerifyVerificationType;
+	type: VerificationTypes;
 	target: string;
 }) {
 	const db = buildDbClient(context);
@@ -272,35 +239,9 @@ async function validateRequest(
 	}
 
 	switch (submissionValue[typeQueryParam]) {
-		case 'reset-password': {
-			await deleteVerification();
-			return handleResetPasswordVerification({
-				request,
-				context,
-				body,
-				submission,
-			});
-		}
 		case 'onboarding': {
 			await deleteVerification();
 			return handleOnboardingVerification({
-				request,
-				context,
-				body,
-				submission,
-			});
-		}
-		case 'change-email': {
-			await deleteVerification();
-			return handleChangeEmailVerification({
-				request,
-				context,
-				body,
-				submission,
-			});
-		}
-		case '2fa': {
-			return handleLoginTwoFactorVerification({
 				request,
 				context,
 				body,
@@ -330,18 +271,6 @@ export default function VerifyRoute() {
 
 	const headings: Record<VerificationTypes, React.ReactNode> = {
 		onboarding: checkEmail,
-		'reset-password': checkEmail,
-		'change-email': checkEmail,
-		'2fa': (
-			<>
-				<h1 className='text-2xl font-semibold tracking-tight'>
-					Check your 2FA app
-				</h1>
-				<p className='text-sm text-muted-foreground'>
-					Please enter your 2FA code to verify your identity.
-				</p>
-			</>
-		),
 	};
 
 	const [form, fields] = useForm({

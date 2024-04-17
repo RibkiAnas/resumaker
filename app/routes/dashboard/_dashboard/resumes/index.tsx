@@ -315,6 +315,7 @@ function Index() {
 									value='delete'
 									type='submit'
 									onClick={() => deleteStateFromLocalStorage(resumeId)}
+									className='w-full'
 								>
 									Continue
 								</AlertDialogAction>

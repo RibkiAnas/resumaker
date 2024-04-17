@@ -1,6 +1,6 @@
 import { json, LoaderFunctionArgs } from '@remix-run/cloudflare';
 import { Form, Link, NavLink, Outlet, useLoaderData } from '@remix-run/react';
-import { CircleUser, FileText, Menu, Settings2 } from 'lucide-react';
+import { CircleUser, FileText, Menu } from 'lucide-react';
 
 import { Button } from '~/components/ui/button';
 import {
@@ -80,17 +80,6 @@ function BuilderLayout() {
 								<FileText className='h-4 w-4' />
 								Resumes
 							</NavLink>
-							<NavLink
-								to='/dashboard/settings/profile'
-								className={({ isActive }) =>
-									isActive
-										? 'flex items-center gap-3 rounded-lg px-3 py-2 transition-all text-foreground bg-muted'
-										: 'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
-								}
-							>
-								<Settings2 className='h-4 w-4' />
-								Settings
-							</NavLink>
 						</nav>
 					</div>
 				</div>
@@ -128,17 +117,6 @@ function BuilderLayout() {
 									<FileText className='h-5 w-5' />
 									Resumes
 								</NavLink>
-								<NavLink
-									to='/dashboard/settings/profile'
-									className={({ isActive }) =>
-										isActive
-											? 'mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-foreground bg-muted'
-											: 'mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground'
-									}
-								>
-									<Settings2 className='h-5 w-5' />
-									Settings
-								</NavLink>
 							</nav>
 						</SheetContent>
 					</Sheet>
@@ -151,10 +129,6 @@ function BuilderLayout() {
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align='end'>
 							<DropdownMenuLabel>My Account</DropdownMenuLabel>
-							<DropdownMenuSeparator />
-							<DropdownMenuItem>
-								<Link to='/dashboard/settings/profile'>Settings</Link>
-							</DropdownMenuItem>
 							<DropdownMenuSeparator />
 							<DropdownMenuItem>
 								{isLoggedInUser ? (
