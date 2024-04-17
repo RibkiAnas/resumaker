@@ -64,7 +64,7 @@ export default function HomePage() {
 					</div>
 				</section>
 
-				<Container className='pt-[10.4rem]'>
+				<Container className='pt-[20rem] md:pt-[10.4rem]'>
 					<Faqs />
 				</Container>
 

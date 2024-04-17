@@ -2,7 +2,6 @@ import { Image, remixImageLoader } from 'remix-image';
 import { Tabs } from '../tabs';
 import Editor from '~/assets/hero-image.png';
 import Customizor from '~/assets/resume-editor.png';
-import Dashboard from '~/assets/resume-dashboard.png';
 
 export const FeatureTabs = () => {
 	const tabs = [
@@ -11,7 +10,7 @@ export const FeatureTabs = () => {
 			value: 'editor',
 			content: (
 				<div
-					className='glass-container w-full h-full'
+					className='glass-container-tabs w-full h-[130%] md:h-full'
 					style={{
 						translate: 'none',
 						rotate: 'none',
@@ -28,10 +27,10 @@ export const FeatureTabs = () => {
 							transform: 'translate(0px, 0px)',
 						}}
 					/>
-					<div className='w-full overflow-hidden relative h-full rounded-2xl p-10 text-xl md:text-4xl font-bold bg-white'>
+					<div className='w-full overflow-hidden relative h-[130%] sm:h-full rounded-2xl p-10 text-xl md:text-4xl font-bold bg-white'>
 						<p>Editor Tab</p>
 						<Image
-							className='object-cover object-left-top h-[60%]  md:h-[90%] absolute -bottom-7 md:-bottom-16 inset-x-0 w-[93%] rounded-xl mx-auto border'
+							className='object-cover object-left-top h-[80%] sm:h-[60%]  md:h-[90%] absolute -bottom-7 md:-bottom-16 inset-x-0 w-[93%] rounded-xl mx-auto border'
 							loaderUrl='/resources/image'
 							loader={remixImageLoader}
 							src={Editor}
@@ -46,7 +45,7 @@ export const FeatureTabs = () => {
 			value: 'customizer',
 			content: (
 				<div
-					className='glass-container w-full h-full'
+					className='glass-container-tabs w-full h-[130%] md:h-full'
 					style={{
 						translate: 'none',
 						rotate: 'none',
@@ -63,49 +62,14 @@ export const FeatureTabs = () => {
 							transform: 'translate(0px, 0px)',
 						}}
 					/>
-					<div className='w-full overflow-hidden relative h-full rounded-2xl p-10 text-xl md:text-4xl font-bold bg-white'>
-						<p>Customizer tab</p>
+					<div className='w-full overflow-hidden relative h-[130%] sm:h-full rounded-2xl p-10 text-xl md:text-4xl font-bold bg-white'>
+						<p>Customizer Tab</p>
 						<Image
-							className='object-cover object-left-top h-[60%]  md:h-[90%] absolute -bottom-7 md:-bottom-16 inset-x-0 w-[93%] rounded-xl mx-auto border'
+							className='object-cover object-left-top h-[80%] sm:h-[60%]  md:h-[90%] absolute -bottom-7 md:-bottom-16 inset-x-0 w-[93%] rounded-xl mx-auto border'
 							loaderUrl='/resources/image'
 							loader={remixImageLoader}
 							src={Customizor}
-							alt='The dashboard of Resumaker'
-						/>
-					</div>
-				</div>
-			),
-		},
-		{
-			title: 'Dashboard',
-			value: 'dashboard',
-			content: (
-				<div
-					className='glass-container w-full h-full'
-					style={{
-						translate: 'none',
-						rotate: 'none',
-						scale: 'none',
-						transform: 'translate(0px, 0px)',
-					}}
-				>
-					<div
-						className='absolute inset-0 -z-10 bg-slate-500/30 blur-2xl filter'
-						style={{
-							translate: 'none',
-							rotate: 'none',
-							scale: 'none',
-							transform: 'translate(0px, 0px)',
-						}}
-					/>
-					<div className='w-full overflow-hidden relative h-full rounded-2xl p-10 text-xl md:text-4xl font-bold bg-white'>
-						<p>Dashboard tab</p>
-						<Image
-							className='object-cover object-left-top h-[60%]  md:h-[90%] absolute -bottom-7 md:-bottom-16 inset-x-0 w-[93%] rounded-xl mx-auto border'
-							loaderUrl='/resources/image'
-							loader={remixImageLoader}
-							src={Dashboard}
-							alt='The dashboard of Resumaker'
+							alt='The dashboard customizer'
 						/>
 					</div>
 				</div>

@@ -147,6 +147,15 @@
 		content: '';
 	}
 
+	.glass-container-tabs {
+		position: relative;
+	}
+
+	.glass-container-tabs::before {
+		@apply absolute -inset-[10px] -z-10 rounded-xl border border-slate-100/20 bg-slate-200/10 backdrop-blur-md h-[140%] md:h-[106%];
+		content: '';
+	}
+
 	.signal-line {
 		--rotation: 90deg;
 		@apply h-[20px] w-[1.5px] bg-gradient-to-t md:h-[1.5px] md:w-[30px] lg:w-[40px] xl:w-[50px];
