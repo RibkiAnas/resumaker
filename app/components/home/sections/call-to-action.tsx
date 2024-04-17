@@ -1,14 +1,13 @@
 import { ChevronRightIcon } from 'lucide-react';
 import { Image, remixImageLoader } from 'remix-image';
 import { useNavigate } from '@remix-run/react';
+import { createId as cuid } from '@paralleldrive/cuid2';
 import { Button } from '~/components/ui/button';
 import { Highlight } from '~/components/home/home-btn';
-import { useOptionalUser } from '~/utils/user';
 import Logo from '~/assets/logo-black-1200x1200.png';
 
 export const CallToAction = () => {
 	const navigate = useNavigate();
-	const user = useOptionalUser();
 
 	return (
 		<div className='mx-auto flex w-full max-w-6xl flex-col items-center'>
@@ -46,11 +45,10 @@ export const CallToAction = () => {
 				variant='default'
 				size='lg'
 				onClick={() => {
-					if (user) navigate('/dashboard/resumes');
-					else navigate('/login');
+					navigate(`/dashboard/builder/${cuid()}`);
 				}}
 			>
-				{user ? <span>Got to Dashboard</span> : <span>Get Started</span>}
+				<span>Get Started</span>
 				<Highlight>
 					<ChevronRightIcon />
 				</Highlight>

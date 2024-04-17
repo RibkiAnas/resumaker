@@ -21,14 +21,14 @@ import {
 import { FontFamily } from '../../fonts/constants';
 import { ScrollArea } from '~/components/ui/scroll-area';
 
-export const ThemeForm = ({ resumeId }: { resumeId: string }) => {
+export const ThemeForm = () => {
 	const settings = useAppSelector(selectSettings);
 	const { fontSize, fontFamily, documentSize } = settings;
 	const themeColor = settings.themeColor || DEFAULT_THEME_COLOR;
 	const dispatch = useAppDispatch();
 
-	useSetInitialStore(resumeId);
-	useSaveStateToLocalStorageOnChange(resumeId);
+	useSetInitialStore();
+	useSaveStateToLocalStorageOnChange();
 
 	const handleSettingsChange = (field: GeneralSetting, value: string) => {
 		dispatch(changeSettings({ field, value }));

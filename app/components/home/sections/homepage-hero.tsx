@@ -3,11 +3,10 @@ import { Hero, HeroSubtitle, HeroTitle } from '../hero/hero';
 import { Highlight, HomeBtn } from '../home-btn';
 import { Button } from '~/components/ui/button';
 import { useNavigate } from '@remix-run/react';
-import { useOptionalUser } from '~/utils/user';
+import { createId as cuid } from '@paralleldrive/cuid2';
 
 function HomepageHero() {
 	const navigate = useNavigate();
-	const user = useOptionalUser();
 
 	return (
 		<Hero>
@@ -33,11 +32,10 @@ function HomepageHero() {
 				variant='default'
 				size='lg'
 				onClick={() => {
-					if (user) navigate('/dashboard/resumes');
-					else navigate('/login');
+					navigate(`/dashboard/builder/${cuid()}`);
 				}}
 			>
-				{user ? <span>Got to Dashboard</span> : <span>Get Started</span>}
+				<span>Get Started</span>
 				<Highlight>
 					<ChevronRightIcon />
 				</Highlight>

@@ -31,7 +31,6 @@ export function Field({
 	labelProps,
 	inputProps,
 	errors,
-	className,
 }: {
 	labelProps: React.LabelHTMLAttributes<HTMLLabelElement>;
 	inputProps: React.InputHTMLAttributes<HTMLInputElement>;

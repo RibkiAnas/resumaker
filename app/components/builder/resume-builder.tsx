@@ -8,12 +8,10 @@ import ResumeDisplay from './resume-display';
 import { ThemeForm } from './resumeForm/themeForm';
 
 interface ResumeBuilderProps {
-	resume: { id: string; title: string | null; content: unknown };
 	defaultLayout?: number[] | undefined;
 }
 
 function ResumeBuilder({
-	resume,
 	defaultLayout = [265, 440, 655],
 }: ResumeBuilderProps) {
 	return (
@@ -45,16 +43,16 @@ function ResumeBuilder({
 						</div>
 						<Separator />
 						<TabsContent value='editor'>
-							<ResumeForms resumeId={resume.id} />
+							<ResumeForms />
 						</TabsContent>
 						<TabsContent value='customizer'>
-							<ThemeForm resumeId={resume.id} />
+							<ThemeForm />
 						</TabsContent>
 					</Tabs>
 				</ResizablePanel>
 				{/* <ResizableHandle className='hidden md:flex' withHandle /> */}
 				<ResizablePanel defaultSize={defaultLayout[2]} className='border'>
-					<ResumeDisplay resume={resume} />
+					<ResumeDisplay />
 				</ResizablePanel>
 			</ResizablePanelGroup>
 		</TooltipProvider>

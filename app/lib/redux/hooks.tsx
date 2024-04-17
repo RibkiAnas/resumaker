@@ -20,19 +20,19 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 /**
  * Hook to save store to local storage on store change
  */
-export const useSaveStateToLocalStorageOnChange = (id: string) => {
+export const useSaveStateToLocalStorageOnChange = () => {
 	useEffect(() => {
 		const unsubscribe = store.subscribe(() => {
-			saveStateToLocalStorage(id, store.getState());
+			saveStateToLocalStorage(store.getState());
 		});
 		return unsubscribe;
 	}, []);
 };
 
-export const useSetInitialStore = (id: string) => {
+export const useSetInitialStore = () => {
 	const dispatch = useAppDispatch();
 	useEffect(() => {
-		const state = loadStateFromLocalStorage(id);
+		const state = loadStateFromLocalStorage();
 		if (!state) return;
 		if (state.resume) {
 			// We merge the initial state with the stored state to ensure
